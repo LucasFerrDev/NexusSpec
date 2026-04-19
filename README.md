@@ -1,75 +1,147 @@
-# Workflow básico com GitHub Copilot (Agent)
+# NexusSpec
 
-![GitHub Copilot](https://www.fusionsol.com/wp-content/uploads/sites/2/2024/12/github-copilot-free-in-vs-code-1.jpg)
+> CLI para workflows de Spec-Driven Development com GitHub Copilot (e outros agentes de IA).
 
-
-Este repositório define um processo simples para transformar uma ideia de produto em documentação de execução de tarefa, usando prompts guiados no Copilot.
-
-## Objetivo
-
-Padronizar como o time cria e mantém:
-- PRD Geral do produto
-- PRD por tarefa
-- TechSpec por tarefa
-- Plano de implementação por tarefa
-
-## Estrutura atual
-
-- `docs/tutorial.md`: tutorial do fluxo completo (PRD Geral → PRD Tarefa → TechSpec → Plano → Implementação), além de sugestões de rules e skills.
-- `prompts/pdr_geral.md`: prompt para conduzir perguntas e gerar o PRD Geral.
-- `prompts/prd_tarefa.md`: prompt para conduzir perguntas e gerar o PRD da tarefa com base no PRD Geral.
-- `prompts/techspec_tarefa.md`: prompt para conduzir perguntas técnicas e gerar a TechSpec da tarefa.
-- `prompts/plan.md`: prompt que identifica automaticamente todas as tarefas sem plano e gera o plano de cada uma, além de manter o `implementation_plan.md` atualizado na raiz do projeto.
-
-## Fluxo recomendado para devs
-
-1. **Gerar PRD Geral**
-   - Usar o prompt de `prompts/pdr_geral.md`.
-   - Saída esperada: `docs/PRD_GERAL.md`.
-
-2. **Gerar PRD da tarefa**
-   - Usar o prompt de `prompts/prd_tarefa.md`.
-   - O prompt considera `docs/PRD_GERAL.md` como contexto.
-   - Saída esperada: `docs/tarefas/tarefa-00X/PRD_TAREFA_00X.md`.
-
-3. **Gerar TechSpec da tarefa**
-   - Usar o prompt de `prompts/techspec_tarefa.md`.
-   - O prompt considera o PRD Geral e o PRD da tarefa.
-   - Saída esperada: `docs/tarefas/tarefa-00X/TECHSPEC_TAREFA_00X.md`.
-
-4. **Gerar plano de execução das tarefas**
-   - Usar o prompt de `prompts/plan.md`.
-   - O prompt varre `docs/tarefas/` automaticamente, identifica quais tarefas ainda não têm plano e gera cada um.
-   - Saída por tarefa: `docs/tarefas/tarefa-00X/PLANO_TAREFA_00X.md`.
-   - Saída consolidada: `implementation_plan.md` na raiz do projeto.
-
-5. **Executar a skill**
-   - Validar com a skill desejada
-
-## Resultado esperado do processo
-
-Ao final de cada tarefa, o time deve ter:
-- PRD da tarefa claro
-- TechSpec objetiva (incluindo contrato de interface quando aplicável)
-- Plano de implementação executável
-- Implementação alinhada ao que foi especificado
+NexusSpec padroniza como times criam e mantêm documentação de produto antes de escrever código, seguindo o fluxo: **PRD Geral → PRD Tarefa → TechSpec → Plano → Implementação**.
 
 ---
 
-Se for a primeira vez no projeto, comece por `docs/tutorial.md` e siga a sequência dos prompts na pasta `prompts/`.
+## Instalação
 
-Resumidamente:
+**Via pip (a partir do GitHub):**
+```bash
+pip install git+https://github.com/LucasFerrDev/NexusSpec.git
+```
 
-## Crie o PRD Geral  
+**Via uv (recomendado):**
+```bash
+uv tool install git+https://github.com/LucasFerrDev/NexusSpec.git
+```
+
+Após instalar, o comando `nexusspec` estará disponível globalmente no terminal.
+
+---
+
+## Uso
+
+### Novo projeto
+
+```bash
+nexusspec init meu-projeto
+```
+
+Cria a pasta `meu-projeto/` com toda a estrutura pronta:
+
+```
+meu-projeto/
+├── docs/
+│   └── tarefas/
+├── prompts/
+│   ├── pdr_geral.md
+│   ├── prd_tarefa.md
+│   ├── techspec_tarefa.md
+│   └── plan.md
+└── README.md
+```
+
+### Projeto existente
+
+```bash
+cd meu-projeto-existente
+nexusspec add
+```
+
+Adiciona os prompts na pasta `prompts/` sem sobrescrever nada que já existe.
+
+### Inicializar no diretório atual
+
+```bash
+nexusspec init .
+```
+
+### Sobrescrever prompts existentes
+
+```bash
+nexusspec init meu-projeto --force
+nexusspec add --force
+```
+
+### Ver prompts disponíveis
+
+```bash
+nexusspec list
+```
+
+---
+
+## Fluxo recomendado
+
+Depois de rodar `nexusspec init`, abra o projeto no VS Code com GitHub Copilot (modo Agent) e siga a sequência:
+
+### 1. PRD Geral
+```
 #pdr_geral.md
-## Crie o PRD da tarefa
+```
+Saída: `docs/PRD_GERAL.md`
+
+### 2. PRD da tarefa
+```
 #prd_tarefa.md
-## Crie o techspec da tarefa
+```
+Saída: `docs/tarefas/tarefa-001/PRD_TAREFA_001.md`
+
+### 3. TechSpec da tarefa
+```
 #techspec_tarefa.md
-## Gere os planos automaticamente
+```
+Saída: `docs/tarefas/tarefa-001/TECHSPEC_TAREFA_001.md`
+
+### 4. Plano automático
+```
 #plan.md
-## Implementação
- Implemente o plano salvando os arquivos na raiz do projeto
-## Adicionar rules ao projeto
-## Adicionar skills
-## Adicionar mcp server
+```
+O agente varre `docs/tarefas/`, identifica quais tarefas ainda não têm plano e gera automaticamente.
+
+Saídas:
+- `docs/tarefas/tarefa-001/PLANO_TAREFA_001.md`
+- `implementation_plan.md` (raiz do projeto — visão consolidada de todas as tarefas)
+
+### 5. Implementação
+```
+Implemente o plano salvando os arquivos na raiz do projeto
+```
+
+---
+
+## Pré-requisitos
+
+- Python 3.11+
+- [uv](https://docs.astral.sh/uv/) (recomendado) ou pip
+- VS Code com GitHub Copilot, Claude Code, ou outro agente de IA compatível
+
+---
+
+## Estrutura do repositório
+
+```
+NexusSpec/
+├── src/
+│   └── nexusspec/
+│       ├── __init__.py
+│       ├── cli.py              ← lógica dos comandos
+│       └── templates/          ← prompts empacotados
+│           ├── pdr_geral.md
+│           ├── prd_tarefa.md
+│           ├── techspec_tarefa.md
+│           └── plan.md
+├── docs/
+│   └── tutorial.md
+├── pyproject.toml
+└── README.md
+```
+
+---
+
+## Licença
+
+MIT
