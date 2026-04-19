@@ -142,6 +142,9 @@ NexusSpec/
 
 ---
 
+
 ## Licença
 
-MIT
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+Este projeto está sob a licença MIT. 
+Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
