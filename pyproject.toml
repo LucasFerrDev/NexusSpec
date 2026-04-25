@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "LucasFerrDev" }]
 keywords = ["sdd", "spec-driven", "workflow", "cli", "copilot"]
-dependencies = ["click>=8.0"]
+dependencies = ["click>=8.0", "questionary>=2.0"]
 
 [project.scripts]
 nexusspec = "nexusspec.cli:main"
