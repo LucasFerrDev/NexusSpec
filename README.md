@@ -91,7 +91,7 @@ Cada prompt vira uma skill em:
 Exemplo:
 
 ```text
-prompts/01-prd.md -> .github/skills/01-prd/SKILL.md
+prompts/prd.md -> .github/skills/prd/SKILL.md
 ```
 
 ### Cursor

@@ -1,6 +1,6 @@
 ---
 name: context-sync
-description: Gera ou atualiza os arquivos de contexto específicos de cada ferramenta de IA (CLAUDE.md, AGENTS.md, .cursorrules). Execute sempre que o context.md mudar.
+description: [00] Gera ou atualiza os arquivos de contexto específicos de cada ferramenta de IA (CLAUDE.md, AGENTS.md, .cursorrules). Execute sempre que o context.md mudar.
 allowed-tools: Read, Write
 ---
 
@@ -23,3 +23,5 @@ cada um adaptado para sua ferramenta:
 - Versão compacta das regras, focada em estilo de código e restrições
 
 Mantenha todos em português e sincronizados com o mesmo conteúdo de `.nexus/context.md`.
+
+Ao finalizar todas as perguntas e a geração dos arquivos, oriente explicitamente o usuário a executar a próxima skill: `/prd.md`.

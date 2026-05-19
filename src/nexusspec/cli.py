@@ -16,10 +16,10 @@ from nexusspec.integrations.skills.services.skills_generator import SkillsGenera
 # ---------------------------------------------------------------------------
 
 TEMPLATES = [
-    "01-prd.md",
-    "02-techspec.md",
-    "03-tasks.md",
-    "04-verify.md",
+    "prd.md",
+    "techespec.md",
+    "tasks.md",
+    "verify.md",
     "context-sync.md",
 ]
 
@@ -108,7 +108,7 @@ def _create_docs_structure(target_dir: Path):
     )
     _scaffold_file(
         target_dir / PRD_DIR / "prd.md",
-        "# PRD — Produto\n\n> Gerado pelo NexusSpec. Execute o prompt 01-prd.md no seu agente de IA.\n",
+        "# PRD — Produto\n\n> Gerado pelo NexusSpec. Execute o prompt prd.md no seu agente de IA.\n",
     )
     _scaffold_file(
         target_dir / PRD_DIR / "personas.md",
@@ -145,11 +145,11 @@ def _create_readme(target_dir: Path, project_name: str):
 ## Fluxo NexusSpec
 
 1. **Contexto** — edite `.nexus/context.md` com a stack e restrições do projeto
-2. **PRD** — execute `/01-prd.md` no seu agente de IA → gera `prd/`
-3. **TechSpec** — execute `/02-techspec.md` por feature → atualiza `changes/[feature]/`
-4. **Tasks** — execute `/03-tasks.md` → gera `changes/[feature]/tasks.md`
+2. **PRD** — execute `/prd.md` no seu agente de IA → gera `prd/`
+3. **TechSpec** — execute `/techespec.md` por feature → atualiza `changes/[feature]/`
+4. **Tasks** — execute `/tasks.md` → gera `changes/[feature]/tasks.md`
 5. **Implementação** — execute cada task do `tasks.md` numa sessão separada
-6. **Verificação** — execute `/04-verify.md` → gera `changes/[feature]/verify.md`
+6. **Verificação** — execute `/verify.md` → gera `changes/[feature]/verify.md`
 7. **Arquivo** — execute `nexusspec task archive [feature]` → move para `archive/`
 
 ## Comandos úteis
@@ -465,7 +465,7 @@ def task_new(name: str | None):
 
     click.echo()
     click.echo(click.style("  Próximo passo no seu agente de IA:", fg="white"))
-    click.echo(click.style("    /02-techspec.md", fg="cyan"))
+    click.echo(click.style("    /techespec.md", fg="cyan"))
     click.echo()
 
 
@@ -636,10 +636,10 @@ def list_templates():
     """Lista os prompts disponíveis no NexusSpec."""
     click.echo(click.style("\n  Prompts disponíveis no NexusSpec:\n", fg="cyan", bold=True))
     descriptions = {
-        "01-prd.md":       "Gera o PRD principal do produto",
-        "02-techspec.md":  "Gera a TechSpec de uma feature",
-        "03-tasks.md":     "Quebra feature em tasks atômicas",
-        "04-verify.md":    "Verifica implementação contra a spec",
+        "prd.md":          "Gera o PRD principal do produto",
+        "techespec.md":    "Gera a TechSpec de uma feature",
+        "tasks.md":        "Quebra feature em tasks atômicas",
+        "verify.md":       "Verifica implementação contra a spec",
         "context-sync.md": "Sincroniza contexto para diferentes ferramentas",
     }
     click.echo(click.style("  Use / para mencionar no seu agente de IA:\n", fg="bright_black"))

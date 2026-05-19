@@ -1,6 +1,6 @@
 ---
-name: 03-tasks
-description: Gera tasks atômicas para uma feature. Cada task deve ser executável numa única sessão de IA sem memória anterior.
+name: tasks
+description: [03] Gera tasks atômicas para uma feature. Cada task deve ser executável numa única sessão de IA sem memória anterior.
 allowed-tools: Read, Write
 ---
 
@@ -46,3 +46,5 @@ Gere o arquivo `changes/[nome-da-feature]/tasks.md` com a seguinte estrutura par
 - Indicar explicitamente os arquivos-alvo
 - Tasks de infraestrutura vêm antes de tasks de feature
 - Tasks de teste vêm depois da implementação correspondente
+
+Ao finalizar e salvar `tasks.md`, oriente explicitamente o usuário a implementar as tasks e, quando concluir a implementação da feature, executar a próxima skill: `/verify.md`.

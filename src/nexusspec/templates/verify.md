@@ -1,6 +1,6 @@
 ---
-name: 04-verify
-description: Verifica se a implementação de uma feature atende à spec. Execute após concluir todas as tasks.
+name: verify
+description: [04] Verifica se a implementação de uma feature atende à spec. Execute após concluir todas as tasks.
 allowed-tools: Read, Bash
 ---
 

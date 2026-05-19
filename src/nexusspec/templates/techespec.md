@@ -1,6 +1,6 @@
 ---
-name: 02-techspec
-description: Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks.
+name: techespec
+description: [02] Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks.
 allowed-tools: Read, Write
 ---
 
@@ -49,3 +49,5 @@ Com base nas respostas, gere e salve:
 8. Diagrama em Mermaid (fluxo ou estados, conforme a feature)
 
 Escreva em português.
+
+Ao finalizar todas as perguntas e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `/tasks.md`.

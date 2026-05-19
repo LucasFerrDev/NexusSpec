@@ -1,6 +1,6 @@
 ---
-name: 01-prd
-description: Gera o PRD principal do produto através de perguntas guiadas. Execute antes de qualquer tarefa.
+name: prd
+description: [01] Gera o PRD principal do produto através de perguntas guiadas. Execute antes de qualquer tarefa.
 allowed-tools: Read, Write
 ---
 
@@ -45,3 +45,5 @@ Com base nas respostas, gere e salve os seguintes arquivos:
 - Critérios de sucesso por funcionalidade
 
 Escreva em português. Sem código, sem decisões técnicas.
+
+Ao finalizar todas as perguntas e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `/techespec.md`.
