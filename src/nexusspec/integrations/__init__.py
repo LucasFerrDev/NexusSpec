@@ -1,0 +1,2 @@
+"""Integrações externas do NexusSpec."""
+

@@ -44,6 +44,8 @@ meu-projeto/
 └── README.md
 ```
 
+Ao escolher a ferramenta no menu final do `init`, o NexusSpec também gera automaticamente as skills a partir de `prompts/` para a plataforma selecionada.
+
 ### Projeto existente
 
 ```bash
@@ -70,6 +72,42 @@ nexusspec add --force
 
 ```bash
 nexusspec list
+```
+
+---
+
+## Integração automática de skills
+
+Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, os prompts são convertidos para o formato de skills correspondente.
+
+### GitHub Copilot / VSCode
+
+Cada prompt vira uma skill em:
+
+```text
+.github/skills/<nome-do-prompt>/SKILL.md
+```
+
+Exemplo:
+
+```text
+prompts/01-prd.md -> .github/skills/01-prd/SKILL.md
+```
+
+### Cursor
+
+Cada prompt vira uma regra em:
+
+```text
+.cursor/rules/<nome-do-prompt>.mdc
+```
+
+### Antigravity
+
+Cada prompt vira uma skill em:
+
+```text
+.agent/skills/<nome-do-prompt>/SKILL.md
 ```
 
 ---
