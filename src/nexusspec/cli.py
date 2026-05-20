@@ -51,6 +51,7 @@ MENU_STYLE = Style([
 
 TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
     ("Antigravity",   [("antigravity", False)]),
+    ("Claude Code",   [("claude", True)]),
     ("Cursor",        [("cursor", True)]),
     ("VSCode", [
         ("code", True),

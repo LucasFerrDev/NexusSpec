@@ -3,6 +3,7 @@
 from ..contracts.provider import SkillProvider
 from ..providers.antigravity import AntigravitySkillProvider
 from ..providers.copilot import CopilotSkillProvider
+from ..providers.claude_code import ClaudeCodeSkillProvider
 from ..providers.cursor import CursorSkillProvider
 
 
@@ -11,6 +12,7 @@ class SkillProviderFactory:
 
     _providers: dict[str, SkillProvider] = {
         "copilot": CopilotSkillProvider(),
+        "claude_code": ClaudeCodeSkillProvider(),
         "cursor": CursorSkillProvider(),
         "antigravity": AntigravitySkillProvider(),
     }
@@ -19,6 +21,7 @@ class SkillProviderFactory:
         "GitHub Copilot": "copilot",
         "VSCode": "copilot",
         "Copilot CLI": "copilot",
+        "Claude Code": "claude_code",
         "Cursor": "cursor",
         "Antigravity": "antigravity",
     }

@@ -94,6 +94,14 @@ Exemplo:
 prompts/prd.md -> .github/skills/prd/SKILL.md
 ```
 
+### Claude Code
+
+Cada prompt vira um comando em:
+
+```text
+.claude/commands/<nome-do-prompt>.md
+```
+
 ### Cursor
 
 Cada prompt vira uma regra em:
