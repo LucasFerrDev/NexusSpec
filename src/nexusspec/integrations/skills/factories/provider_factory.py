@@ -18,11 +18,15 @@ class SkillProviderFactory:
     }
 
     _tool_to_provider_key: dict[str, str] = {
+        "vscode": "copilot",
         "GitHub Copilot": "copilot",
         "VSCode": "copilot",
         "Copilot CLI": "copilot",
+        "claude": "claude_code",
         "Claude Code": "claude_code",
+        "cursor": "cursor",
         "Cursor": "cursor",
+        "antigravity": "antigravity",
         "Antigravity": "antigravity",
     }
 

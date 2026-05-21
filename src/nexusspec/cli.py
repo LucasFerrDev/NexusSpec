@@ -2,6 +2,7 @@
 
 import click
 import re
+import shutil
 import subprocess
 import questionary
 from collections.abc import Callable
@@ -10,6 +11,7 @@ from importlib.resources import files
 from pathlib import Path
 
 from nexusspec.integrations.skills.services.skills_generator import SkillsGeneratorService
+from nexusspec.integrations.skills.providers.shared.prompt_loader import load_prompt_templates
 
 # ---------------------------------------------------------------------------
 # Constantes
@@ -60,9 +62,62 @@ TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
     ("Sair", []),
 ]
 
+SKILLS_TOOL_LABELS: dict[str, str] = {
+    "vscode": "VSCode",
+    "claude": "Claude Code",
+    "cursor": "Cursor",
+    "antigravity": "Antigravity",
+}
+
+SKILLS_TOOL_DIRS: dict[str, Path] = {
+    "vscode": Path(".github") / "skills",
+    "claude": Path(".claude") / "commands",
+    "cursor": Path(".cursor") / "rules",
+    "antigravity": Path(".agent") / "skills",
+}
+
 # ---------------------------------------------------------------------------
 # Helpers — estrutura de projeto
 # ---------------------------------------------------------------------------
+
+def _normalize_skill_name(skill: str) -> str:
+    name = Path(skill).name
+    if name.endswith(".mdc"):
+        return name[:-4]
+    if name.endswith(".md"):
+        return name[:-3]
+    return name
+
+
+def _filter_prompts_by_skill(prompts, skill: str):
+    target_stem = _normalize_skill_name(skill)
+    target_name = f"{target_stem}.md"
+    return [
+        prompt
+        for prompt in prompts
+        if prompt.stem == target_stem or prompt.name == skill or prompt.name == target_name
+    ]
+
+
+def _skill_target_path(project_dir: Path, tool_key: str, skill: str) -> Path:
+    skill_name = _normalize_skill_name(skill)
+    base_dir = project_dir / SKILLS_TOOL_DIRS[tool_key]
+    if tool_key in {"vscode", "antigravity"}:
+        return base_dir / skill_name
+    if tool_key == "cursor":
+        return base_dir / f"{skill_name}.mdc"
+    return base_dir / f"{skill_name}.md"
+
+
+def _cleanup_empty_skill_dirs(project_dir: Path, tool_key: str):
+    skills_dir = project_dir / SKILLS_TOOL_DIRS[tool_key]
+    if skills_dir.exists() and skills_dir.is_dir() and not any(skills_dir.iterdir()):
+        skills_dir.rmdir()
+
+    parent_dir = skills_dir.parent
+    if parent_dir.exists() and parent_dir.is_dir() and not any(parent_dir.iterdir()):
+        parent_dir.rmdir()
+
 
 def _get_template(filename: str) -> str:
     return files("nexusspec.templates").joinpath(filename).read_text(encoding="utf-8")
@@ -160,6 +215,8 @@ nexusspec task new --name nome-da-feature   # cria nova feature em changes/
 nexusspec task status                        # exibe progresso de todas as features
 nexusspec task archive nome-da-feature       # arquiva feature concluída
 nexusspec open                               # abre o projeto no editor escolhido
+nexusspec skills add --tool vscode           # gera skills para a ferramenta escolhida
+nexusspec skills remove --tool vscode        # remove as skills da ferramenta escolhida
 ```
 
 ## Estrutura
@@ -200,10 +257,32 @@ def _try_open(commands: list[tuple[str, bool]], project_path: str) -> bool:
     return False
 
 
-def _generate_skills_for_tool(project_dir: Path, tool_choice: str, overwrite: bool = False):
+def _generate_skills_for_tool(
+    project_dir: Path,
+    tool_choice: str,
+    overwrite: bool = False,
+    skill: str | None = None,
+):
+    prompts = load_prompt_templates(project_dir=project_dir)
+    if not prompts:
+        click.echo(click.style("  ⚠  Nenhum prompt encontrado em prompts/.", fg="yellow"))
+        return
+
+    if skill:
+        prompts = _filter_prompts_by_skill(prompts, skill)
+        if not prompts:
+            click.echo(click.style(f"  ✗  Skill '{skill}' não encontrada em prompts/.", fg="red"))
+            return
+
     service = SkillsGeneratorService()
-    report = service.generate_for_tool(project_dir=project_dir, tool_choice=tool_choice, overwrite=overwrite)
+    report = service.generate_for_tool(
+        project_dir=project_dir,
+        tool_choice=tool_choice,
+        overwrite=overwrite,
+        prompts=prompts,
+    )
     if report is None:
+        click.echo(click.style("  ✗  Ferramenta de skills não suportada.", fg="red"))
         return
 
     if report.created_files:
@@ -400,6 +479,136 @@ def open_project(path: str):
     click.echo(click.style(BANNER, fg="cyan"))
     click.echo(click.style(f"  Projeto: {target}\n", fg="white"))
     _tool_menu(str(target))
+
+
+# ---------------------------------------------------------------------------
+# nexusspec skills
+# ---------------------------------------------------------------------------
+
+@main.group("skills")
+def skills():
+    """Gerencia skills das ferramentas integradas."""
+    pass
+
+
+@skills.command("add")
+@click.option(
+    "--tool",
+    "tool",
+    required=True,
+    type=click.Choice(sorted(SKILLS_TOOL_LABELS.keys()), case_sensitive=False),
+    help="Ferramenta alvo para gerar skills.",
+)
+@click.option(
+    "--skill",
+    "skill",
+    default=None,
+    help="Nome do prompt/skill para gerar (ex: prd ou prd.md).",
+)
+@click.option("--force", is_flag=True, default=False, help="Sobrescreve skills existentes.")
+def skills_add(tool: str, skill: str | None, force: bool):
+    """
+    Gera skills a partir dos prompts do projeto.
+
+    \b
+    Exemplos:
+      nexusspec skills add --tool vscode
+      nexusspec skills add --tool claude --force
+    """
+    tool_key = tool.lower()
+    tool_label = SKILLS_TOOL_LABELS[tool_key]
+    project_dir = Path.cwd()
+
+    click.echo(click.style(BANNER, fg="cyan"))
+    click.echo(click.style(f"  Gerando skills para {tool_label} em: {project_dir}\n", fg="white"))
+
+    _generate_skills_for_tool(
+        project_dir=project_dir,
+        tool_choice=tool_key,
+        overwrite=force,
+        skill=skill,
+    )
+
+
+@skills.command("remove")
+@click.option(
+    "--tool",
+    "tool",
+    required=True,
+    type=click.Choice(sorted(SKILLS_TOOL_LABELS.keys()), case_sensitive=False),
+    help="Ferramenta alvo para remover skills.",
+)
+@click.option(
+    "--skill",
+    "skill",
+    default=None,
+    help="Nome do prompt/skill para remover (ex: prd ou prd.md).",
+)
+@click.option("--yes", is_flag=True, default=False, help="Remove sem confirmação.")
+def skills_remove(tool: str, skill: str | None, yes: bool):
+    """
+    Remove o diretório de skills da ferramenta escolhida.
+
+    \b
+    Exemplos:
+      nexusspec skills remove --tool cursor
+      nexusspec skills remove --tool antigravity --yes
+    """
+    tool_key = tool.lower()
+    tool_label = SKILLS_TOOL_LABELS[tool_key]
+    project_dir = Path.cwd()
+    target_dir = project_dir / SKILLS_TOOL_DIRS[tool_key]
+
+    click.echo(click.style(BANNER, fg="cyan"))
+    click.echo(click.style(f"  Removendo skills de {tool_label} em: {project_dir}\n", fg="white"))
+
+    if skill:
+        target_path = _skill_target_path(project_dir, tool_key, skill)
+        if not target_path.exists():
+            click.echo(click.style(f"  ⚠  Skill não encontrada: {target_path.relative_to(project_dir)}", fg="yellow"))
+            return
+
+        if not yes:
+            if not click.confirm(
+                f"Remover {target_path.relative_to(project_dir)}?",
+                default=False,
+            ):
+                click.echo(click.style("  Operação cancelada.", fg="bright_black"))
+                return
+
+        if target_path.is_dir():
+            shutil.rmtree(target_path)
+        else:
+            target_path.unlink()
+
+        _cleanup_empty_skill_dirs(project_dir, tool_key)
+        click.echo(click.style(
+            f"  ✔  Skill removida: {target_path.relative_to(project_dir)}",
+            fg="green",
+        ))
+        return
+
+    if not target_dir.exists():
+        relative_path = SKILLS_TOOL_DIRS[tool_key]
+        click.echo(click.style(f"  ⚠  Nenhuma skill encontrada em {relative_path}.", fg="yellow"))
+        return
+
+    if not target_dir.is_dir():
+        click.echo(click.style(f"  ✗  Caminho inválido: {target_dir}", fg="red"))
+        raise SystemExit(1)
+
+    if not yes:
+        relative_path = SKILLS_TOOL_DIRS[tool_key]
+        if not click.confirm(
+            f"Remover {relative_path}? Isso apagará os arquivos gerados.",
+            default=False,
+        ):
+            click.echo(click.style("  Operação cancelada.", fg="bright_black"))
+            return
+
+    shutil.rmtree(target_dir)
+    _cleanup_empty_skill_dirs(project_dir, tool_key)
+    click.echo(click.style(f"  ✔  Skills removidas: {SKILLS_TOOL_DIRS[tool_key]}", fg="green"))
 
 
 # ---------------------------------------------------------------------------

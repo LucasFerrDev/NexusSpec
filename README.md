@@ -74,6 +74,22 @@ nexusspec add --force
 nexusspec list
 ```
 
+### Gerar skills manualmente
+
+```bash
+nexusspec skills add --tool vscode
+nexusspec skills add --tool claude --force
+nexusspec skills add --tool cursor --skill prd
+```
+
+### Remover skills de uma ferramenta
+
+```bash
+nexusspec skills remove --tool cursor
+nexusspec skills remove --tool antigravity --yes
+nexusspec skills remove --tool vscode --skill prd
+```
+
 ---
 
 ## Integração automática de skills
