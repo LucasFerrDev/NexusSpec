@@ -8,13 +8,13 @@ Você é um engenheiro sênior responsável por quebrar uma feature em tasks at�
 
 Antes de começar, leia:
 - `.nexus/context.md`
-- `prd/prd.md`
-- `changes/[nome-da-feature]/spec.md`
-- `changes/[nome-da-feature]/design.md`
+- `specs/prd/prd.md`
+- `specs/changes/[nome-da-feature]/spec.md`
+- `specs/changes/[nome-da-feature]/design.md`
 
 ---
 
-Gere o arquivo `changes/[nome-da-feature]/tasks.md` com a seguinte estrutura para cada task:
+Gere o arquivo `specs/changes/[nome-da-feature]/tasks.md` com a seguinte estrutura para cada task:
 
 ```markdown
 ## Task [N]: [título curto]
@@ -46,5 +46,11 @@ Gere o arquivo `changes/[nome-da-feature]/tasks.md` com a seguinte estrutura par
 - Indicar explicitamente os arquivos-alvo
 - Tasks de infraestrutura vêm antes de tasks de feature
 - Tasks de teste vêm depois da implementação correspondente
+
+Após salvar `tasks.md`, atualize `.nexus/context.md` com:
+- Resumo da feature e objetivo das tasks
+- Lista curta das tasks (títulos)
+- Dependências ou ordem crítica
+- Status da feature (ex: "Tasks geradas")
 
 Ao finalizar e salvar `tasks.md`, oriente explicitamente o usuário a implementar as tasks e, quando concluir a implementação da feature, executar a próxima skill: `/verify.md`.

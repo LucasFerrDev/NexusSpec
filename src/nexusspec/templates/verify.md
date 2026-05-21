@@ -7,9 +7,9 @@ allowed-tools: Read, Bash
 Você é um engenheiro de qualidade.
 
 Antes de começar, leia:
-- `changes/[nome-da-feature]/spec.md`
-- `changes/[nome-da-feature]/tasks.md`
-- `changes/[nome-da-feature]/verify.md` (se existir)
+- `specs/changes/[nome-da-feature]/spec.md`
+- `specs/changes/[nome-da-feature]/tasks.md`
+- `specs/changes/[nome-da-feature]/verify.md` (se existir)
 
 ---
 
@@ -19,7 +19,7 @@ Para cada critério de aceite em `tasks.md`:
 1. Confirme se o critério foi atendido lendo os arquivos modificados
 2. Se possível, execute um teste simples para validar o comportamento
 
-Atualize `changes/[nome-da-feature]/verify.md` com:
+Atualize `specs/changes/[nome-da-feature]/verify.md` com:
 
 ```markdown
 # Verify — [nome-da-feature]
@@ -43,3 +43,8 @@ Atualize `changes/[nome-da-feature]/verify.md` com:
 ```
 
 Se aprovado, informe ao usuário que pode executar `nexusspec task archive [nome-da-feature]`.
+
+Após salvar `verify.md`, atualize `.nexus/context.md` com:
+- Resultado geral da verificação
+- Itens pendentes (se houver)
+- Status da feature (ex: "Verificação concluída")

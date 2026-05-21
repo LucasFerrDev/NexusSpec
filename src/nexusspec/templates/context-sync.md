@@ -14,7 +14,7 @@ cada um adaptado para sua ferramenta:
 - Stack técnica
 - Restrições de implementação
 - Onde fica cada artefato do framework
-- Como usar os prompts em `prompts/`
+- Como usar os templates em `utilities/`
 
 **`AGENTS.md`** — para Codex/OpenAI:
 - Mesmo conteúdo do CLAUDE.md adaptado para o formato AGENTS.md
@@ -23,5 +23,8 @@ cada um adaptado para sua ferramenta:
 - Versão compacta das regras, focada em estilo de código e restrições
 
 Mantenha todos em português e sincronizados com o mesmo conteúdo de `.nexus/context.md`.
+
+Após gerar os arquivos, atualize `.nexus/context.md` registrando que o contexto foi sincronizado
+e quais arquivos foram atualizados (CLAUDE.md, AGENTS.md, .cursorrules).
 
 Ao finalizar todas as perguntas e a geração dos arquivos, oriente explicitamente o usuário a executar a próxima skill: `/prd.md`.

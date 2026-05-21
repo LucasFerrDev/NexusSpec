@@ -6,7 +6,7 @@ from ..contracts.provider import GenerationReport, PromptTemplate
 
 
 class ClaudeCodeSkillProvider:
-    """Gera `.claude/commands/<prompt>.md` a partir dos prompts do projeto."""
+    """Gera `.claude/commands/<prompt>.md` a partir das utilities do projeto."""
 
     name = "Claude Code"
 

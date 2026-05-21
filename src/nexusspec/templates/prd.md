@@ -27,23 +27,30 @@ Ao final, gere os três documentos indicados.
 
 Com base nas respostas, gere e salve os seguintes arquivos:
 
-**`prd/prd.md`** com as seções:
+**`specs/prd/prd.md`** com as seções:
 1. Visão geral
 2. Objetivo
 3. Funcionalidades principais (lista priorizada)
 4. Restrições e premissas
 5. Fora do escopo
 
-**`prd/personas.md`** com:
+**`specs/prd/personas.md`** com:
 - Nome e perfil de cada persona
 - Objetivo principal de cada uma dentro do produto
 - Frustrações atuais que o produto resolve
 
-**`prd/metrics.md`** com:
+**`specs/prd/metrics.md`** com:
 - Métricas de adoção
 - Métricas de qualidade
 - Critérios de sucesso por funcionalidade
 
 Escreva em português. Sem código, sem decisões técnicas.
+
+Após salvar os arquivos, atualize `.nexus/context.md` com:
+- Resumo do produto e objetivo
+- Personas e público-alvo
+- Funcionalidades principais e fora do escopo
+- Métricas de sucesso
+- Status do projeto (ex: "PRD criado")
 
 Ao finalizar todas as perguntas e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `/techespec.md`.

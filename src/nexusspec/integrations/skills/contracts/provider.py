@@ -7,7 +7,7 @@ from typing import Protocol
 
 @dataclass(frozen=True)
 class PromptTemplate:
-    """Representa um prompt carregado da pasta prompts/."""
+    """Representa um template carregado da pasta utilities/."""
 
     name: str
     stem: str
@@ -36,4 +36,3 @@ class SkillProvider(Protocol):
         overwrite: bool = False,
     ) -> GenerationReport:
         """Gera arquivos de skills da plataforma."""
-
