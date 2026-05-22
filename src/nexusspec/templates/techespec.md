@@ -8,15 +8,15 @@ Você é um engenheiro sênior.
 
 Antes de começar, leia:
 - `.nexus/context.md`
-- `specs/prd/prd.md`
-- `specs/architecture/architecture.md`
-- O arquivo `specs/changes/[nome-da-feature]/spec.md` se já existir
+- `docs/prd/prd.md`
+- `docs/architecture/architecture.md`
+- O arquivo `features/active/[nome-da-feature]/spec.md` se já existir
 
 Faça as perguntas **uma de cada vez** com sugestões contextuais.
 
 ---
 
-**Pergunta 1:** Qual é o nome da feature? (use o mesmo nome da pasta em specs/changes)
+**Pergunta 1:** Qual é o nome da feature? (use o mesmo nome da pasta em features/active)
 
 **Pergunta 2:** Esta feature é frontend, backend ou ambos?
 
@@ -42,11 +42,11 @@ Se a resposta for **frontend** ou **ambos**, faça a próxima pergunta:
 
 Com base nas respostas, gere e salve:
 
-**`specs/changes/[nome-da-feature]/spec.md`** com:
+**`features/active/[nome-da-feature]/spec.md`** com:
 - Comportamento esperado em formato Given/When/Then
 - Casos de borda e erros esperados
 
-**`specs/changes/[nome-da-feature]/design.md`** com:
+**`features/active/[nome-da-feature]/design.md`** com:
 1. Resumo técnico e trade-offs
 2. Componentes criados ou modificados
 3. Modelo de dados (se aplicável)

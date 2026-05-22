@@ -1,11 +1,11 @@
-"""Carregamento de utilities para geração de skills."""
+"""Carregamento de prompts para geração de skills."""
 
 from pathlib import Path
 
 from ...contracts.provider import PromptTemplate
 
 
-def load_prompt_templates(project_dir: Path, prompts_dir: str = "utilities") -> list[PromptTemplate]:
+def load_prompt_templates(project_dir: Path, prompts_dir: str = "prompts") -> list[PromptTemplate]:
     """Lê os templates .md do projeto e retorna templates ordenados."""
     base_dir = project_dir / prompts_dir
     if not base_dir.exists():

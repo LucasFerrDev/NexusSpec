@@ -15,14 +15,14 @@ Mude para modo Agent
 
 ## 1- Crie o PRD Geral
 
-Referencie o arquivo utilities/pdr_geral.md
+Referencie o arquivo prompts/pdr_geral.md
 ```bash
 #pdr_geral.md
 ```
 
 ## 2- Crie o PRD da tarefa
 
-Referencie o arquivo utilities/pdr_tarefa.md
+Referencie o arquivo prompts/pdr_tarefa.md
 ```bash
 #pdr_tarefa.md
 ```
@@ -30,7 +30,7 @@ Referencie o arquivo utilities/pdr_tarefa.md
 
 ## 3- Crie o techspec da tarefa
 
-Referencie o arquivo utilities/techspec_tarefa.md
+Referencie o arquivo prompts/techspec_tarefa.md
 ```bash
 #techspec_tarefa.md
 ```
@@ -77,7 +77,7 @@ A estrutura do projeto ficaria assim:
 docs/
 └── tarefas/
     └── tarefa-001/
-utilities/
+prompts/
 └── prd_geral.md
 ```
 
@@ -146,7 +146,7 @@ Se o projeto crescer, você pode também separar em um arquivo dedicado:
 └── instructions/
     ├── frontend.md           ← Bootstrap, componentes, padrões visuais
     ├── backend.md            ← padrões de API, banco, autenticação
-    └── documentacao.md       ← estrutura de pastas e utilities
+    └── documentacao.md       ← estrutura de pastas e prompts
 ```
 
 ***Skills manualmente:***
@@ -155,11 +155,11 @@ Como criar uma skill no GitHub Copilot de forma mnual
 
 ## Onde colocar
 
-── utilities/
+── prompts/
 │   ├── skills/
 │   │   └── clean-code.md        ← skill aqui
 
-Crie o arquivo clean-code.md dentro de utilities/skills/
+Crie o arquivo clean-code.md dentro de prompts/skills/
 Cole o conteúdo abaixo no arquivo clean-code.md
 Cada skill é um arquivo `.md` separado.
 
@@ -278,7 +278,7 @@ Pergunte-se:
 o Copilot não ativa automaticamente skills neste formato
 Você precisaria referenciar explicitamente no chat:
 
-@workspace /utilities/skills/clean-code.md revise este código
+@workspace /prompts/skills/clean-code.md revise este código
 
 
 

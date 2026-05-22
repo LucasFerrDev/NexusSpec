@@ -35,12 +35,18 @@ Cria a pasta `meu-projeto/` com toda a estrutura pronta:
 ```
 meu-projeto/
 ├── .nexus/context.md
-├── specs/
+├── docs/
 │   ├── prd/
-│   ├── architecture/
-│   ├── changes/
-│   └── archive/
-├── utilities/
+│   │   ├── prd.md
+│   │   ├── personas.md
+│   │   └── metrics.md
+│   └── architecture/
+│       ├── architecture.md
+│       └── epics.md
+├── features/
+│   ├── active/
+│   └── done/
+├── prompts/
 │   ├── prd.md
 │   ├── techespec.md
 │   ├── tasks.md
@@ -49,7 +55,7 @@ meu-projeto/
 └── README.md
 ```
 
-Ao escolher a ferramenta no menu final do `init`, o NexusSpec também gera automaticamente as skills a partir de `utilities/` para a plataforma selecionada.
+Ao escolher a ferramenta no menu final do `init`, o NexusSpec também gera automaticamente as skills a partir de `prompts/` para a plataforma selecionada.
 
 ### Projeto existente
 
@@ -58,7 +64,7 @@ cd meu-projeto-existente
 nexusspec add
 ```
 
-Adiciona as utilities na pasta `utilities/` sem sobrescrever nada que já existe.
+Adiciona os prompts na pasta `prompts/` sem sobrescrever nada que já existe.
 
 ### Inicializar no diretório atual
 
@@ -66,14 +72,14 @@ Adiciona as utilities na pasta `utilities/` sem sobrescrever nada que já existe
 nexusspec init .
 ```
 
-### Sobrescrever utilities existentes
+### Sobrescrever prompts existentes
 
 ```bash
 nexusspec init meu-projeto --force
 nexusspec add --force
 ```
 
-### Ver utilities disponíveis
+### Ver prompts disponíveis
 
 ```bash
 nexusspec list
@@ -99,11 +105,11 @@ nexusspec skills remove --tool vscode --skill prd
 
 ## Integração automática de skills
 
-Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, as utilities são convertidas para o formato de skills correspondente.
+Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, os prompts são convertidos para o formato de skills correspondente.
 
 ### GitHub Copilot / VSCode
 
-Cada utility vira uma skill em:
+Cada prompt vira uma skill em:
 
 ```text
 .github/skills/<nome-do-prompt>/SKILL.md
@@ -112,12 +118,12 @@ Cada utility vira uma skill em:
 Exemplo:
 
 ```text
-utilities/prd.md -> .github/skills/prd/SKILL.md
+prompts/prd.md -> .github/skills/prd/SKILL.md
 ```
 
 ### Claude Code
 
-Cada utility vira um comando em:
+Cada prompt vira um comando em:
 
 ```text
 .claude/commands/<nome-do-prompt>.md
@@ -196,7 +202,7 @@ NexusSpec/
 │   └── nexusspec/
 │       ├── __init__.py
 │       ├── cli.py              ← lógica dos comandos
-│       └── templates/          ← utilities empacotadas
+│       └── templates/          ← prompts empacotados
 │           ├── prd.md
 │           ├── techespec.md
 │           ├── tasks.md

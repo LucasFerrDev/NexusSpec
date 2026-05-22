@@ -8,13 +8,13 @@ Você é um engenheiro sênior responsável por quebrar uma feature em tasks at�
 
 Antes de começar, leia:
 - `.nexus/context.md`
-- `specs/prd/prd.md`
-- `specs/changes/[nome-da-feature]/spec.md`
-- `specs/changes/[nome-da-feature]/design.md`
+- `docs/prd/prd.md`
+- `features/active/[nome-da-feature]/spec.md`
+- `features/active/[nome-da-feature]/design.md`
 
 ---
 
-Gere o arquivo `specs/changes/[nome-da-feature]/tasks.md` com a seguinte estrutura para cada task:
+Gere o arquivo `features/active/[nome-da-feature]/tasks.md` com a seguinte estrutura para cada task:
 
 ```markdown
 ## Task [N]: [título curto]

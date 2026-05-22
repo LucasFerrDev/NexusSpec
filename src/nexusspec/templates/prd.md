@@ -27,19 +27,19 @@ Ao final, gere os três documentos indicados.
 
 Com base nas respostas, gere e salve os seguintes arquivos:
 
-**`specs/prd/prd.md`** com as seções:
+**`docs/prd/prd.md`** com as seções:
 1. Visão geral
 2. Objetivo
 3. Funcionalidades principais (lista priorizada)
 4. Restrições e premissas
 5. Fora do escopo
 
-**`specs/prd/personas.md`** com:
+**`docs/prd/personas.md`** com:
 - Nome e perfil de cada persona
 - Objetivo principal de cada uma dentro do produto
 - Frustrações atuais que o produto resolve
 
-**`specs/prd/metrics.md`** com:
+**`docs/prd/metrics.md`** com:
 - Métricas de adoção
 - Métricas de qualidade
 - Critérios de sucesso por funcionalidade

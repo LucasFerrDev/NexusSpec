@@ -25,13 +25,14 @@ TEMPLATES = [
     "context-sync.md",
 ]
 
-UTILITIES_DIR = "utilities"
+UTILITIES_DIR = "prompts"
 NEXUS_DIR = ".nexus"
-SPECS_DIR = "specs"
-PRD_DIR = f"{SPECS_DIR}/prd"
-ARCH_DIR = f"{SPECS_DIR}/architecture"
-CHANGES_DIR = f"{SPECS_DIR}/changes"
-ARCHIVE_DIR = f"{SPECS_DIR}/archive"
+DOCS_DIR = "docs"
+PRD_DIR = f"{DOCS_DIR}/prd"
+ARCH_DIR = f"{DOCS_DIR}/architecture"
+FEATURES_DIR = "features"
+CHANGES_DIR = f"{FEATURES_DIR}/active"
+ARCHIVE_DIR = f"{FEATURES_DIR}/done"
 
 BANNER = """
  _   _                      _____                 
@@ -147,6 +148,7 @@ def _create_docs_structure(target_dir: Path):
         NEXUS_DIR,
         PRD_DIR,
         ARCH_DIR,
+        FEATURES_DIR,
         CHANGES_DIR,
         ARCHIVE_DIR,
     ]:
@@ -162,9 +164,7 @@ def _create_docs_structure(target_dir: Path):
     _scaffold_file(
         target_dir / NEXUS_DIR / "context.md",
         "# Contexto do projeto\n\n"
-        "> Preencha: stack, restrições, decisões globais, ferramentas utilizadas.\n"
-        "> As skills devem manter este arquivo atualizado com decisões e progresso.\n\n"
-        "## Atualizações\n",
+        "> Preencha: stack, restrições, decisões globais, ferramentas utilizadas.\n",
     )
     _scaffold_file(
         target_dir / PRD_DIR / "prd.md",
@@ -205,19 +205,19 @@ def _create_readme(target_dir: Path, project_name: str):
 ## Fluxo NexusSpec
 
 1. **Contexto** — preencha `.nexus/context.md` e mantenha atualizado com decisões e progresso
-2. **PRD** — execute `/prd.md` no seu agente de IA → gera `specs/prd/`
-3. **TechSpec** — execute `/techespec.md` por feature → atualiza `specs/changes/[feature]/`
-4. **Tasks** — execute `/tasks.md` → gera `specs/changes/[feature]/tasks.md`
+2. **PRD** — execute `/prd.md` no seu agente de IA → gera `docs/prd/`
+3. **TechSpec** — execute `/techespec.md` por feature → atualiza `features/active/[feature]/`
+4. **Tasks** — execute `/tasks.md` → gera `features/active/[feature]/tasks.md`
 5. **Implementação** — execute cada task do `tasks.md` numa sessão separada
-6. **Verificação** — execute `/verify.md` → gera `specs/changes/[feature]/verify.md`
-7. **Arquivo** — execute `nexusspec task archive [feature]` → move para `specs/archive/`
+6. **Verificação** — execute `/verify.md` → gera `features/active/[feature]/verify.md`
+7. **Arquivo** — execute `nexusspec task archive [feature]` → move para `features/done/`
 
 ## Comandos úteis
 
 ```bash
-nexusspec task new --name nome-da-feature   # cria nova feature em specs/changes/
+nexusspec task new --name nome-da-feature   # cria nova feature em features/active/
 nexusspec task status                        # exibe progresso de todas as features
-nexusspec task archive nome-da-feature       # arquiva feature concluída
+nexusspec task archive nome-da-feature       # arquiva feature concluída em features/done/
 nexusspec open                               # abre o projeto no editor escolhido
 nexusspec skills add --tool vscode           # gera skills para a ferramenta escolhida
 nexusspec skills remove --tool vscode        # remove as skills da ferramenta escolhida
@@ -227,13 +227,14 @@ nexusspec skills remove --tool vscode        # remove as skills da ferramenta es
 
 ```
 {project_name}/
-├── .nexus/context.md          ← contexto, stack e decisões do projeto
-├── specs/
+├── .nexus/context.md          ← regras e stack do projeto
+├── docs/
 │   ├── prd/                   ← PRD, personas, métricas
-│   ├── architecture/          ← decisões técnicas, épicos
-│   ├── changes/               ← features em andamento
-│   └── archive/               ← features concluídas
-└── utilities/                 ← templates para o agente de IA
+│   └── architecture/          ← decisões técnicas, épicos
+├── features/
+│   ├── active/                ← features em andamento
+│   └── done/                  ← features concluídas
+└── prompts/                   ← prompts para o agente de IA
 ```
 """
     readme.write_text(content, encoding="utf-8")
@@ -270,13 +271,13 @@ def _generate_skills_for_tool(
 ):
     prompts = load_prompt_templates(project_dir=project_dir)
     if not prompts:
-        click.echo(click.style("  ⚠  Nenhuma utility encontrada em utilities/.", fg="yellow"))
+        click.echo(click.style("  ⚠  Nenhum prompt encontrado em prompts/.", fg="yellow"))
         return
 
     if skill:
         prompts = _filter_prompts_by_skill(prompts, skill)
         if not prompts:
-            click.echo(click.style(f"  ✗  Skill '{skill}' não encontrada em utilities/.", fg="red"))
+            click.echo(click.style(f"  ✗  Skill '{skill}' não encontrada em prompts/.", fg="red"))
             return
 
     service = SkillsGeneratorService()
@@ -400,7 +401,7 @@ def main(ctx: click.Context):
 
 @main.command("init")
 @click.argument("project_name")
-@click.option("--force", is_flag=True, default=False, help="Sobrescreve arquivos de utilities existentes.")
+@click.option("--force", is_flag=True, default=False, help="Sobrescreve arquivos de prompts existentes.")
 def init(project_name: str, force: bool):
     """
     Inicializa um novo projeto NexusSpec e oferece abrir no editor.
@@ -427,10 +428,10 @@ def init(project_name: str, force: bool):
 # ---------------------------------------------------------------------------
 
 @main.command("add")
-@click.option("--force", is_flag=True, default=False, help="Sobrescreve utilities existentes.")
+@click.option("--force", is_flag=True, default=False, help="Sobrescreve prompts existentes.")
 def add(force: bool):
     """
-    Adiciona as utilities NexusSpec em um projeto já existente.
+    Adiciona os prompts NexusSpec em um projeto já existente.
 
     \b
     Exemplos:
@@ -439,14 +440,14 @@ def add(force: bool):
     """
     target_dir = Path.cwd()
     click.echo(click.style(BANNER, fg="cyan"))
-    click.echo(click.style(f"  Adicionando utilities NexusSpec em: {target_dir}\n", fg="white"))
+    click.echo(click.style(f"  Adicionando prompts NexusSpec em: {target_dir}\n", fg="white"))
 
     _create_docs_structure(target_dir)
     click.echo(click.style("  ✔  Estrutura NexusSpec verificada", fg="green"))
 
     copied = _copy_utilities(target_dir, overwrite=force)
     if copied:
-        click.echo(click.style(f"  ✔  Utilities adicionadas: {', '.join(copied)}", fg="green"))
+        click.echo(click.style(f"  ✔  Prompts adicionados: {', '.join(copied)}", fg="green"))
 
     click.echo()
     click.echo(click.style("  ─────────────────────────────────────────", fg="bright_black"))
@@ -513,7 +514,7 @@ def skills():
 @click.option("--force", is_flag=True, default=False, help="Sobrescreve skills existentes.")
 def skills_add(tool: str, skill: str | None, force: bool):
     """
-    Gera skills a partir das utilities do projeto.
+    Gera skills a partir dos prompts do projeto.
 
     \b
     Exemplos:
@@ -676,7 +677,7 @@ def task_new(name: str | None):
     click.echo()
     click.echo(click.style(f"  ✔  Feature criada: {name_slug}", fg="green"))
     for f in files_created:
-        click.echo(click.style(f"     → specs/changes/{name_slug}/{f}", fg="bright_black"))
+        click.echo(click.style(f"     → features/active/{name_slug}/{f}", fg="bright_black"))
 
     click.echo()
     click.echo(click.style("  Próximo passo no seu agente de IA:", fg="white"))
@@ -697,7 +698,7 @@ def task_status():
     changes_dir = target_dir / CHANGES_DIR
 
     if not changes_dir.exists():
-        click.echo(click.style("  ✗  Nenhuma pasta specs/changes encontrada.", fg="red"))
+        click.echo(click.style("  ✗  Nenhuma pasta features/active encontrada.", fg="red"))
         raise SystemExit(1)
 
     features = sorted([
@@ -740,7 +741,7 @@ def task_status():
 @click.argument("feature_name")
 def task_archive(feature_name: str):
     """
-    Move uma feature concluída de specs/changes para specs/archive.
+    Move uma feature concluída de features/active para features/done.
 
     \b
     Exemplos:
@@ -751,17 +752,17 @@ def task_archive(feature_name: str):
     dest = target_dir / ARCHIVE_DIR / feature_name
 
     if not source.exists():
-        click.echo(click.style(f"  ✗  Feature '{feature_name}' não encontrada em specs/changes.", fg="red"))
+        click.echo(click.style(f"  ✗  Feature '{feature_name}' não encontrada em features/active.", fg="red"))
         raise SystemExit(1)
 
     if dest.exists():
-        click.echo(click.style(f"  ✗  Já existe '{feature_name}' em specs/archive.", fg="yellow"))
+        click.echo(click.style(f"  ✗  Já existe '{feature_name}' em features/done.", fg="yellow"))
         raise SystemExit(1)
 
     import shutil
     shutil.move(str(source), str(dest))
     click.echo(click.style(f"\n  ✅  '{feature_name}' arquivada com sucesso!\n", fg="green"))
-    click.echo(click.style(f"     → specs/archive/{feature_name}/\n", fg="bright_black"))
+    click.echo(click.style(f"     → features/done/{feature_name}/\n", fg="bright_black"))
 
 
 @task.command("done")
@@ -812,10 +813,10 @@ def task_done(task_id: str):
 # ---------------------------------------------------------------------------
 
 @main.command("update")
-@click.option("--force", is_flag=True, default=False, help="Sobrescreve todas as utilities com a versão mais recente.")
+@click.option("--force", is_flag=True, default=False, help="Sobrescreve todos os prompts com a versão mais recente.")
 def update(force: bool):
     """
-    Atualiza as utilities do projeto para a versão mais recente do NexusSpec.
+    Atualiza os prompts do projeto para a versão mais recente do NexusSpec.
 
     \b
     Exemplos:
@@ -829,14 +830,14 @@ def update(force: bool):
         raise SystemExit(1)
 
     click.echo(click.style(BANNER, fg="cyan"))
-    click.echo(click.style("  Atualizando utilities...\n", fg="white"))
+    click.echo(click.style("  Atualizando prompts...\n", fg="white"))
 
     copied = _copy_utilities(target_dir, overwrite=force)
 
     if copied:
-        click.echo(click.style(f"  ✔  Utilities atualizadas: {', '.join(copied)}", fg="green"))
+        click.echo(click.style(f"  ✔  Prompts atualizados: {', '.join(copied)}", fg="green"))
     else:
-        click.echo(click.style("  ℹ  Todas as utilities já estão na versão atual.", fg="cyan"))
+        click.echo(click.style("  ℹ  Todos os prompts já estão na versão atual.", fg="cyan"))
         click.echo(click.style("     Use --force para sobrescrever mesmo assim.", fg="bright_black"))
 
     click.echo()
@@ -848,8 +849,8 @@ def update(force: bool):
 
 @main.command("list")
 def list_templates():
-    """Lista as utilities disponíveis no NexusSpec."""
-    click.echo(click.style("\n  Utilities disponíveis no NexusSpec:\n", fg="cyan", bold=True))
+    """Lista os prompts disponíveis no NexusSpec."""
+    click.echo(click.style("\n  Prompts disponíveis no NexusSpec:\n", fg="cyan", bold=True))
     descriptions = {
         "prd.md":          "Gera o PRD principal do produto",
         "techespec.md":    "Gera a TechSpec de uma feature",

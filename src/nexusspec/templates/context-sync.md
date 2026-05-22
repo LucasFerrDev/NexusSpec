@@ -13,8 +13,8 @@ cada um adaptado para sua ferramenta:
 - Resumo do produto em 2 frases
 - Stack técnica
 - Restrições de implementação
-- Onde fica cada artefato do framework
-- Como usar os templates em `utilities/`
+- Onde ficam os artefatos do framework (`docs/prd/`, `docs/architecture/`, `features/active/`, `features/done/`)
+- Como usar os templates em `prompts/`
 
 **`AGENTS.md`** — para Codex/OpenAI:
 - Mesmo conteúdo do CLAUDE.md adaptado para o formato AGENTS.md

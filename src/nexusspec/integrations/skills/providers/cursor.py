@@ -15,7 +15,7 @@ PROMPT_METADATA: dict[str, tuple[str, str]] = {
 
 
 class CursorSkillProvider:
-    """Gera `.cursor/rules/*.mdc` a partir das utilities do projeto."""
+    """Gera `.cursor/rules/*.mdc` a partir dos prompts do projeto."""
 
     name = "Cursor"
 
