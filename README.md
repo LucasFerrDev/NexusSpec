@@ -2,7 +2,7 @@
 
 > CLI para workflows de Spec-Driven Development com GitHub Copilot (e outros agentes de IA).
 
-NexusSpec padroniza como times criam e mantêm documentação de produto antes de escrever código, seguindo o fluxo: **PRD Geral → PRD Tarefa → TechSpec → Plano → Implementação**.
+NexusSpec padroniza como times criam e mantêm documentação de produto antes de escrever código, seguindo o fluxo: **PRD → TechSpec → Task → Apply → Verify**.
 
 ---
 
@@ -34,7 +34,6 @@ Cria a pasta `meu-projeto/` com toda a estrutura pronta:
 
 ```
 meu-projeto/
-├── .nexus/context.md
 ├── docs/
 │   ├── prd/
 │   │   ├── prd.md
@@ -44,18 +43,14 @@ meu-projeto/
 │       ├── architecture.md
 │       └── epics.md
 ├── features/
-│   ├── active/
+│   ├── specs/
+│   │   └── .gitkeep
 │   └── done/
-├── prompts/
-│   ├── prd.md
-│   ├── techespec.md
-│   ├── tasks.md
-│   ├── verify.md
-│   └── context-sync.md
+│       └── .gitkeep
 └── README.md
 ```
 
-Ao escolher a ferramenta no menu final do `init`, o NexusSpec também gera automaticamente as skills a partir de `prompts/` para a plataforma selecionada.
+Ao escolher a ferramenta no menu final do `init`, o NexusSpec gera automaticamente as skills para a plataforma selecionada.
 
 ### Projeto existente
 
@@ -64,7 +59,7 @@ cd meu-projeto-existente
 nexusspec add
 ```
 
-Adiciona os prompts na pasta `prompts/` sem sobrescrever nada que já existe.
+Adiciona a estrutura NexusSpec e gera skills via menu.
 
 ### Inicializar no diretório atual
 
@@ -72,14 +67,14 @@ Adiciona os prompts na pasta `prompts/` sem sobrescrever nada que já existe.
 nexusspec init .
 ```
 
-### Sobrescrever prompts existentes
+### Sobrescrever skills existentes
 
 ```bash
 nexusspec init meu-projeto --force
 nexusspec add --force
 ```
 
-### Ver prompts disponíveis
+### Ver skills disponíveis
 
 ```bash
 nexusspec list
@@ -105,28 +100,26 @@ nexusspec skills remove --tool vscode --skill prd
 
 ## Integração automática de skills
 
-Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, os prompts são convertidos para o formato de skills correspondente.
+Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, os templates internos são convertidos para o formato de skills correspondente.
 
 ### GitHub Copilot / VSCode
 
 Cada prompt vira uma skill em:
 
 ```text
-.github/skills/<nome-do-prompt>/SKILL.md
+.github/skills/<nome-da-skill>/SKILL.md
 ```
 
 Exemplo:
 
-```text
-prompts/prd.md -> .github/skills/prd/SKILL.md
-```
+Exemplo: `.github/skills/prd/SKILL.md`
 
 ### Claude Code
 
 Cada prompt vira um comando em:
 
 ```text
-.claude/commands/<nome-do-prompt>.md
+.claude/commands/<nome-da-skill>.md
 ```
 
 ### Cursor
@@ -134,7 +127,7 @@ Cada prompt vira um comando em:
 Cada utility vira uma regra em:
 
 ```text
-.cursor/rules/<nome-do-prompt>.mdc
+.cursor/rules/<nome-da-skill>.mdc
 ```
 
 ### Antigravity
@@ -142,47 +135,20 @@ Cada utility vira uma regra em:
 Cada utility vira uma skill em:
 
 ```text
-.agent/skills/<nome-do-prompt>/SKILL.md
+.agent/skills/<nome-da-skill>/SKILL.md
 ```
 
 ---
 
 ## Fluxo recomendado
 
-Depois de rodar `nexusspec init`, abra o projeto no VS Code com GitHub Copilot (modo Agent) e siga a sequência:
+Depois de rodar `nexusspec init`, use as skills instaladas na sua ferramenta de IA na ordem:
 
-### 1. PRD Geral
-```
-#pdr_geral.md
-```
-Saída: `docs/PRD_GERAL.md`
-
-### 2. PRD da tarefa
-```
-#prd_tarefa.md
-```
-Saída: `docs/tarefas/tarefa-001/PRD_TAREFA_001.md`
-
-### 3. TechSpec da tarefa
-```
-#techspec_tarefa.md
-```
-Saída: `docs/tarefas/tarefa-001/TECHSPEC_TAREFA_001.md`
-
-### 4. Plano automático
-```
-#plan.md
-```
-O agente varre `docs/tarefas/`, identifica quais tarefas ainda não têm plano e gera automaticamente.
-
-Saídas:
-- `docs/tarefas/tarefa-001/PLANO_TAREFA_001.md`
-- `implementation_plan.md` (raiz do projeto — visão consolidada de todas as tarefas)
-
-### 5. Implementação
-```
-Implemente o plano salvando os arquivos na raiz do projeto
-```
+1. **prd** — gera `docs/prd/`
+2. **techspec** — gera `features/specs/[feature]/spec.md` e `design.md`
+3. **task** — gera `features/specs/[feature]/task.md`
+4. **apply** — implementa as tasks pendentes
+5. **verify** — valida a implementação e recomenda arquivamento
 
 ---
 
@@ -202,12 +168,12 @@ NexusSpec/
 │   └── nexusspec/
 │       ├── __init__.py
 │       ├── cli.py              ← lógica dos comandos
-│       └── templates/          ← prompts empacotados
+│       └── templates/          ← templates de skills empacotados
 │           ├── prd.md
-│           ├── techespec.md
-│           ├── tasks.md
+│           ├── techspec.md
+│           ├── task.md
+│           ├── apply.md
 │           ├── verify.md
-│           └── context-sync.md
 ├── docs/
 │   └── tutorial.md
 ├── pyproject.toml

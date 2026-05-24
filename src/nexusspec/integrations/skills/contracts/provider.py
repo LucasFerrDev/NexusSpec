@@ -7,7 +7,7 @@ from typing import Protocol
 
 @dataclass(frozen=True)
 class PromptTemplate:
-    """Representa um template carregado da pasta prompts/."""
+    """Representa um template carregado do projeto ou do pacote."""
 
     name: str
     stem: str

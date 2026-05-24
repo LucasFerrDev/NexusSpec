@@ -8,7 +8,7 @@ from ..providers.shared.prompt_loader import load_prompt_templates
 
 
 class SkillsGeneratorService:
-    """Orquestra a geração de skills a partir dos prompts do projeto."""
+    """Orquestra a geração de skills a partir dos templates do NexusSpec."""
 
     def generate_for_tool(
         self,

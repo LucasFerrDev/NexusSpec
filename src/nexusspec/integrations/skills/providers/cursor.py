@@ -7,15 +7,15 @@ from ..contracts.provider import GenerationReport, PromptTemplate
 
 PROMPT_METADATA: dict[str, tuple[str, str]] = {
     "prd": ("PRD generation assistant", "PRD Generator"),
-    "techespec": ("Technical specification assistant", "TechSpec Generator"),
-    "tasks": ("Task breakdown assistant", "Task Breakdown Generator"),
+    "techspec": ("Technical specification assistant", "TechSpec Generator"),
+    "task": ("Task tracker generator", "Task Generator"),
+    "apply": ("Task implementation assistant", "Apply Assistant"),
     "verify": ("Implementation verification assistant", "Verification Assistant"),
-    "context-sync": ("Context synchronization assistant", "Context Sync Assistant"),
 }
 
 
 class CursorSkillProvider:
-    """Gera `.cursor/rules/*.mdc` a partir dos prompts do projeto."""
+    """Gera `.cursor/rules/*.mdc` a partir dos templates do NexusSpec."""
 
     name = "Cursor"
 
