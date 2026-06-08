@@ -18,7 +18,7 @@ pip install git+https://github.com/LucasFerrDev/NexusSpec.git
 uv tool install git+https://github.com/LucasFerrDev/NexusSpec.git
 ```
 
-Após instalar, o comando `nexusspec` estará disponível globalmente no terminal.
+Após instalar, o comando `nspec` estará disponível globalmente no terminal.
 
 ---
 
@@ -27,7 +27,7 @@ Após instalar, o comando `nexusspec` estará disponível globalmente no termina
 ### Novo projeto
 
 ```bash
-nexusspec init meu-projeto
+nspec init meu-projeto
 ```
 
 Cria a pasta `meu-projeto/` com toda a estrutura pronta:
@@ -56,7 +56,7 @@ Ao escolher a ferramenta no menu final do `init`, o NexusSpec gera automaticamen
 
 ```bash
 cd meu-projeto-existente
-nexusspec add
+nspec add
 ```
 
 Adiciona a estrutura NexusSpec e gera skills via menu.
@@ -64,43 +64,43 @@ Adiciona a estrutura NexusSpec e gera skills via menu.
 ### Inicializar no diretório atual
 
 ```bash
-nexusspec init .
+nspec init .
 ```
 
 ### Sobrescrever skills existentes
 
 ```bash
-nexusspec init meu-projeto --force
-nexusspec add --force
+nspec init meu-projeto --force
+nspec add --force
 ```
 
 ### Ver skills disponíveis
 
 ```bash
-nexusspec list
+nspec list
 ```
 
 ### Gerar skills manualmente
 
 ```bash
-nexusspec skills add --tool vscode
-nexusspec skills add --tool claude --force
-nexusspec skills add --tool cursor --skill prd
+nspec skills add --tool vscode
+nspec skills add --tool claude --force
+nspec skills add --tool cursor --skill prd
 ```
 
 ### Remover skills de uma ferramenta
 
 ```bash
-nexusspec skills remove --tool cursor
-nexusspec skills remove --tool antigravity --yes
-nexusspec skills remove --tool vscode --skill prd
+nspec skills remove --tool cursor
+nspec skills remove --tool antigravity --yes
+nspec skills remove --tool vscode --skill prd
 ```
 
 ---
 
 ## Integração automática de skills
 
-Durante `nexusspec init` e `nexusspec add`, ao selecionar a ferramenta no menu, os templates internos são convertidos para o formato de skills correspondente.
+Durante `nspec init` e `nspec add`, ao selecionar a ferramenta no menu, os templates internos são convertidos para o formato de skills correspondente.
 
 ### GitHub Copilot / VSCode
 
@@ -142,7 +142,7 @@ Cada utility vira uma skill em:
 
 ## Fluxo recomendado
 
-Depois de rodar `nexusspec init`, use as skills instaladas na sua ferramenta de IA na ordem:
+Depois de rodar `nspec init`, use as skills instaladas na sua ferramenta de IA na ordem:
 
 1. **prd** — gera `docs/prd/`
 2. **techspec** — gera `features/specs/[feature]/spec.md` e `design.md`

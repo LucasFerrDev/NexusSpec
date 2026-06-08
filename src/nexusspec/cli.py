@@ -192,12 +192,12 @@ Use-as diretamente pelo seu agente na seguinte ordem:
 ## Comandos úteis
 
 ```bash
-nexusspec task new --name nome-da-feature   # cria nova feature em features/specs/
-nexusspec task status                        # exibe progresso de todas as features
-nexusspec task archive nome-da-feature       # arquiva feature concluída em features/done/
-nexusspec open                               # abre o projeto no editor escolhido
-nexusspec skills add --tool vscode           # gera skills para a ferramenta escolhida
-nexusspec skills remove --tool vscode        # remove as skills da ferramenta escolhida
+nspec task new --name nome-da-feature        # cria nova feature em features/specs/
+nspec task status                            # exibe progresso de todas as features
+nspec task archive nome-da-feature           # arquiva feature concluída em features/done/
+nspec open                                   # abre o projeto no editor escolhido
+nspec skills add --tool vscode               # gera skills para a ferramenta escolhida
+nspec skills remove --tool vscode            # remove as skills da ferramenta escolhida
 ```
 
 ## Estrutura
@@ -364,12 +364,12 @@ def main(ctx: click.Context):
     if ctx.invoked_subcommand is None:
         click.echo(click.style(BANNER, fg="cyan"))
         click.echo("  Nenhum subcomando informado.")
-        click.echo("  Use  nexusspec init <projeto>  para iniciar um projeto.")
-        click.echo("  Use  nexusspec --help  para ver todos os comandos.\n")
+        click.echo("  Use  nspec init <projeto>  para iniciar um projeto.")
+        click.echo("  Use  nspec --help  para ver todos os comandos.\n")
 
 
 # ---------------------------------------------------------------------------
-# nexusspec init
+# nspec init
 # ---------------------------------------------------------------------------
 
 @main.command("init")
@@ -387,9 +387,9 @@ def init(project_name: str, force: bool, target: Path | None):
 
     \b
     Exemplos:
-      nexusspec init meu-projeto
-      nexusspec init .
-      nexusspec init meu-projeto --force
+      nspec init meu-projeto
+      nspec init .
+      nspec init meu-projeto --force
     """
     target_dir = _run_init(project_name, force, target)
     _tool_menu(
@@ -403,7 +403,7 @@ def init(project_name: str, force: bool, target: Path | None):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec add
+# nspec add
 # ---------------------------------------------------------------------------
 
 @main.command("add")
@@ -414,8 +414,8 @@ def add(force: bool):
 
     \b
     Exemplos:
-      nexusspec add
-      nexusspec add --force
+      nspec add
+      nspec add --force
     """
     target_dir = Path.cwd()
     click.echo(click.style(BANNER, fg="cyan"))
@@ -439,7 +439,7 @@ def add(force: bool):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec open
+# nspec open
 # ---------------------------------------------------------------------------
 
 @main.command("open")
@@ -450,8 +450,8 @@ def open_project(path: str):
 
     \b
     Exemplos:
-      nexusspec open
-      nexusspec open meu-projeto
+      nspec open
+      nspec open meu-projeto
     """
     target = Path(path).resolve()
     if not target.exists():
@@ -463,7 +463,7 @@ def open_project(path: str):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec skills
+# nspec skills
 # ---------------------------------------------------------------------------
 
 @main.group("skills")
@@ -493,8 +493,8 @@ def skills_add(tool: str, skill: str | None, force: bool):
 
     \b
     Exemplos:
-      nexusspec skills add --tool vscode
-      nexusspec skills add --tool claude --force
+      nspec skills add --tool vscode
+      nspec skills add --tool claude --force
     """
     tool_key = tool.lower()
     tool_label = SKILLS_TOOL_LABELS[tool_key]
@@ -532,8 +532,8 @@ def skills_remove(tool: str, skill: str | None, yes: bool):
 
     \b
     Exemplos:
-      nexusspec skills remove --tool cursor
-      nexusspec skills remove --tool antigravity --yes
+      nspec skills remove --tool cursor
+      nspec skills remove --tool antigravity --yes
     """
     tool_key = tool.lower()
     tool_label = SKILLS_TOOL_LABELS[tool_key]
@@ -593,7 +593,7 @@ def skills_remove(tool: str, skill: str | None, yes: bool):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec task
+# nspec task
 # ---------------------------------------------------------------------------
 
 @main.group("task")
@@ -616,15 +616,15 @@ def task_new(name: str | None, target: Path | None):
 
     \b
     Exemplos:
-      nexusspec task new
-      nexusspec task new --name autenticacao-usuario
+      nspec task new
+      nspec task new --name autenticacao-usuario
     """
     target_dir = target if target is not None else Path.cwd()
 
     # Verifica se é um projeto NexusSpec
     if not _is_nexusspec_project(target_dir):
         click.echo(click.style("  ✗  Nenhum projeto NexusSpec encontrado neste diretório.", fg="red"))
-        click.echo(click.style("     Execute nexusspec init <projeto> primeiro.", fg="red"))
+        click.echo(click.style("     Execute nspec init <projeto> primeiro.", fg="red"))
         raise SystemExit(1)
 
     if not name:
@@ -704,7 +704,7 @@ def task_status(target: Path | None):
 
     \b
     Exemplos:
-      nexusspec task status
+      nspec task status
     """
     target_dir = target if target is not None else Path.cwd()
     specs_dir = target_dir / SPECS_DIR
@@ -719,7 +719,7 @@ def task_status(target: Path | None):
 
     if not features:
         click.echo(click.style("\n  Nenhuma feature encontrada.\n", fg="yellow"))
-        click.echo(click.style("  Use  nexusspec task new --name nome-da-feature  para criar uma.\n", fg="bright_black"))
+        click.echo(click.style("  Use  nspec task new --name nome-da-feature  para criar uma.\n", fg="bright_black"))
         return
 
     click.echo(click.style(BANNER, fg="cyan"))
@@ -748,7 +748,7 @@ def task_archive(feature_name: str, target: Path | None):
 
     \b
     Exemplos:
-      nexusspec task archive autenticacao-usuario
+      nspec task archive autenticacao-usuario
     """
     target_dir = target if target is not None else Path.cwd()
     source = target_dir / SPECS_DIR / feature_name
@@ -789,8 +789,8 @@ def task_done(task_id: str):
 
     \b
     Exemplos:
-      nexusspec task done 001
-      nexusspec task done tarefa-001
+      nspec task done 001
+      nspec task done tarefa-001
     """
     target_dir = Path.cwd()
     plan_file = target_dir / "implementation_plan.md"
@@ -825,7 +825,7 @@ def task_done(task_id: str):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec update
+# nspec update
 # ---------------------------------------------------------------------------
 
 @main.command("update")
@@ -836,8 +836,8 @@ def update(force: bool):
 
     \b
     Exemplos:
-      nexusspec update
-      nexusspec update --force
+      nspec update
+      nspec update --force
     """
     target_dir = Path.cwd()
 
@@ -861,7 +861,7 @@ def update(force: bool):
 
 
 # ---------------------------------------------------------------------------
-# nexusspec list
+# nspec list
 # ---------------------------------------------------------------------------
 
 @main.command("list")

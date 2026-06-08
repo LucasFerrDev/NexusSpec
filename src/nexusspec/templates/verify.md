@@ -65,7 +65,7 @@ Exiba um relatório para cada feature com:
 Ao final da validação, exibir para cada feature aprovada:
 
 > ✅ [nome-da-feature] aprovada.  
-> Para arquivar, execute: `nexusspec task archive [nome-da-feature]`
+> Para arquivar, execute: `nspec task archive [nome-da-feature]`
 
 Para features com pendências:
 
