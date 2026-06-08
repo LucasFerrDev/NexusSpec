@@ -8,9 +8,11 @@ NexusSpec padroniza como times criam e mantêm documentação de produto antes d
 
 ## Instalação
 
-**Via pip (a partir do GitHub):**
+**Via pip (em um ambiente virtual):**
 ```bash
-pip install git+https://github.com/LucasFerrDev/NexusSpec.git
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install git+https://github.com/LucasFerrDev/NexusSpec.git
 ```
 
 **Via uv (recomendado):**
@@ -18,7 +20,9 @@ pip install git+https://github.com/LucasFerrDev/NexusSpec.git
 uv tool install git+https://github.com/LucasFerrDev/NexusSpec.git
 ```
 
-Após instalar, o comando `nspec` estará disponível globalmente no terminal.
+> Se o seu sistema bloquear `pip install` globalmente, use um virtualenv como acima.
+
+Após instalar, o comando `nspec` estará disponível no terminal do ambiente ativo.
 
 ---
 
