@@ -10,7 +10,7 @@ keywords = ["sdd", "spec-driven", "workflow", "cli", "copilot"]
 dependencies = ["click>=8.0", "questionary>=2.0"]
 
 [project.scripts]
-nexusspec = "nexusspec.cli:main"
+nspec = "nexusspec.cli:main"
 
 [build-system]
 requires = ["hatchling"]
