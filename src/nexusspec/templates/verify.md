@@ -1,6 +1,6 @@
 ---
 name: verify
-description: [05] Valida a implementação das features e recomenda arquivamento.
+description: "[05] Valida a implementação das features e recomenda arquivamento."
 allowed-tools: Read, Bash
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: prd
-description: [01] Gera o PRD principal do produto através de perguntas guiadas. Execute antes de qualquer tarefa.
+description: "[01] Gera o PRD principal do produto através de perguntas guiadas. Execute antes de qualquer tarefa."
 allowed-tools: Read, Write
 ---
 

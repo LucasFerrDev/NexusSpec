@@ -1,10 +1,15 @@
 ---
 name: techspec
-description: [02] Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks.
+description: "[02] Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks."
 allowed-tools: Read, Write
 ---
 
 Você é um engenheiro sênior.
+
+Seu objetivo é:
+1. Capturar as informações de arquitetura geral do projeto (stack e tecnologias)
+2. Escrever/atualizar o arquivo `docs/architecture/architecture.md` com essas informações
+3. Criar ou atualizar a TechSpec de uma feature específica
 
 Antes de começar, leia:
 - `docs/prd/prd.md`
@@ -170,3 +175,69 @@ Arquivos gerados:
 Escreva em português.
 
 Ao finalizar todas as perguntas e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `task`.
+
+--
+
+Após coletar todas as informações, **crie e salve o arquivo `docs/architecture/architecture.md`** com o seguinte conteúdo:
+
+```markdown
+# Arquitetura do Projeto: [nome-do-projeto]
+
+## Visão Geral
+
+[Descrição breve da arquitetura e seus componentes principais]
+
+## Stack Tecnológico
+
+### Backend
+- **Linguagem:** [Linguagem(ns)]
+- **Framework:** [Framework]
+- **Runtime:** [Runtime, ex: Node.js, JVM, etc]
+
+### Frontend
+- **Framework:** [Framework]
+- **Linguagem:** [Linguagem, geralmente TypeScript/JavaScript]
+
+### Database
+- **Principal:** [Banco principal]
+- **Cache:** [Redis/Memcached/Outro, se aplicável]
+- **Search:** [Elasticsearch/Algolia/Outro, se aplicável]
+
+### Ferramentas & Dependências
+- **Testes:** [Ferramentas de teste]
+- **Build & Deploy:** [Ferramentas de build]
+- **Observabilidade:** [Logging, Monitoring, Tracing]
+- **Authentication:** [OAuth/JWT/Outra]
+
+## Padrões & Arquitetura
+
+### Padrão de Design
+[Explicar o padrão usado: MVC, Hexagonal, DDD, etc]
+
+### Estrutura do Projeto
+[Descrever a organização de diretórios e pacotes]
+
+### Comunicação entre Componentes
+[Explicar como frontend e backend se comunicam, protocolos usados, etc]
+
+## Integrações Externas
+
+[Listar serviços e APIs externas integradas]
+
+## Segurança
+
+[Estratégias de autenticação, autorização, criptografia, etc]
+
+## Performance & Escalabilidade
+
+[Considerações sobre caching, load balancing, etc]
+
+## Observações Importantes
+
+[Qualquer informação adicional relevante para o projeto]
+
+---
+
+**Última atualização:** [Data]
+**Atualizado por:** [Seu nome via TechSpec Skill]
+```

@@ -1,6 +1,6 @@
 ---
 name: task
-description: [03] Gera o task.md de uma feature como tracker de progresso.
+description: "[03] Gera o task.md de uma feature como tracker de progresso."
 allowed-tools: Read, Write
 ---
 
@@ -8,6 +8,7 @@ Você é um engenheiro sênior responsável por criar um checklist de implementa
 
 Antes de começar, leia:
 - `docs/prd/prd.md`
+- `docs/architecture/architecture.md` — para entender o contexto técnico e padrões do projeto
 - `features/specs/[nome-da-feature]/spec.md`
 - `features/specs/[nome-da-feature]/design.md`
 
