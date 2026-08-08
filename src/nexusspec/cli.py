@@ -46,6 +46,7 @@ MENU_STYLE = Style([
 TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
     ("Antigravity",   [("antigravity", False)]),
     ("Claude Code",   [("claude", True)]),
+    ("Codex CLI",     [("codex", False)]),
     ("Cursor",        [("cursor", True)]),
     ("VSCode", [
         ("code", True),
@@ -57,6 +58,7 @@ TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
 SKILLS_TOOL_LABELS: dict[str, str] = {
     "vscode": "VSCode",
     "claude": "Claude Code",
+    "codex": "Codex CLI",
     "cursor": "Cursor",
     "antigravity": "Antigravity",
 }
@@ -64,6 +66,7 @@ SKILLS_TOOL_LABELS: dict[str, str] = {
 SKILLS_TOOL_DIRS: dict[str, Path] = {
     "vscode": Path(".github") / "skills",
     "claude": Path(".claude") / "commands",
+    "codex": Path(".agents") / "skills",
     "cursor": Path(".cursor") / "rules",
     "antigravity": Path(".agent") / "skills",
 }
@@ -94,7 +97,7 @@ def _filter_prompts_by_skill(prompts, skill: str):
 def _skill_target_path(project_dir: Path, tool_key: str, skill: str) -> Path:
     skill_name = _normalize_skill_name(skill)
     base_dir = project_dir / SKILLS_TOOL_DIRS[tool_key]
-    if tool_key in {"vscode", "antigravity"}:
+    if tool_key in {"vscode", "antigravity", "codex"}:
         return base_dir / skill_name
     if tool_key == "cursor":
         return base_dir / f"{skill_name}.mdc"
@@ -225,12 +228,18 @@ def _try_open(commands: list[tuple[str, bool]], project_path: str) -> bool:
         if requires_path:
             parts.append(project_path)
         try:
-            result = subprocess.run(
-                parts,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                timeout=5,
-            )
+            if parts[0] == "codex":
+                # O Codex e interativo: ele precisa herdar o terminal atual. O
+                # projeto e definido pelo diretorio de trabalho, pois um caminho
+                # posicional seria interpretado pelo CLI como um prompt.
+                result = subprocess.run(parts, cwd=project_path)
+            else:
+                result = subprocess.run(
+                    parts,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=5,
+                )
             if result.returncode == 0:
                 return True
         except (FileNotFoundError, subprocess.TimeoutExpired):
