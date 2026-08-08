@@ -46,7 +46,7 @@ MENU_STYLE = Style([
 TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
     ("Antigravity",   [("antigravity", False)]),
     ("Claude Code",   [("claude", True)]),
-    ("Codex",         [("codex", True)]),
+    ("Codex CLI",     [("codex", False)]),
     ("Cursor",        [("cursor", True)]),
     ("VSCode", [
         ("code", True),
@@ -58,7 +58,7 @@ TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
 SKILLS_TOOL_LABELS: dict[str, str] = {
     "vscode": "VSCode",
     "claude": "Claude Code",
-    "codex": "Codex",
+    "codex": "Codex CLI",
     "cursor": "Cursor",
     "antigravity": "Antigravity",
 }
@@ -228,12 +228,18 @@ def _try_open(commands: list[tuple[str, bool]], project_path: str) -> bool:
         if requires_path:
             parts.append(project_path)
         try:
-            result = subprocess.run(
-                parts,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                timeout=5,
-            )
+            if parts[0] == "codex":
+                # O Codex e interativo: ele precisa herdar o terminal atual. O
+                # projeto e definido pelo diretorio de trabalho, pois um caminho
+                # posicional seria interpretado pelo CLI como um prompt.
+                result = subprocess.run(parts, cwd=project_path)
+            else:
+                result = subprocess.run(
+                    parts,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=5,
+                )
             if result.returncode == 0:
                 return True
         except (FileNotFoundError, subprocess.TimeoutExpired):

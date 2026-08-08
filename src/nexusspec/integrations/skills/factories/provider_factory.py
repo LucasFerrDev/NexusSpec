@@ -28,6 +28,7 @@ class SkillProviderFactory:
         "Claude Code": "claude_code",
         "codex": "codex",
         "Codex": "codex",
+        "Codex CLI": "codex",
         "cursor": "cursor",
         "Cursor": "cursor",
         "antigravity": "antigravity",

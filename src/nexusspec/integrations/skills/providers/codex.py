@@ -8,7 +8,7 @@ from ..contracts.provider import GenerationReport, PromptTemplate
 class CodexSkillProvider:
     """Gera ``.agents/skills/<skill>/SKILL.md`` para cada prompt."""
 
-    name = "Codex"
+    name = "Codex CLI"
 
     def generate(
         self,
