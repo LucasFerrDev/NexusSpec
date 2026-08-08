@@ -2,7 +2,7 @@
 
 > CLI para workflows de Spec-Driven Development com GitHub Copilot (e outros agentes de IA).
 
-NexusSpec padroniza como times criam e mantêm documentação de produto antes de escrever código, seguindo o fluxo: **PRD → TechSpec → Task → Apply → Verify**.
+NexusSpec padroniza como times criam e mantêm documentação de produto antes de escrever código, seguindo o fluxo: **PRD → Specify → Task → Apply → Verify**.
 
 ---
 
@@ -162,7 +162,7 @@ Cada utility vira uma skill em:
 Depois de rodar `nspec init`, use as skills instaladas na sua ferramenta de IA na ordem:
 
 1. **prd** — gera `docs/prd/`
-2. **techspec** — gera `features/specs/[feature]/spec.md` e `design.md`
+2. **Specify** — gera `features/specs/[feature]/spec.md` e `design.md`
 3. **task** — gera `features/specs/[feature]/task.md`
 4. **apply** — implementa as tasks pendentes
 5. **verify** — valida a implementação e recomenda arquivamento
@@ -187,7 +187,7 @@ NexusSpec/
 │       ├── cli.py              ← lógica dos comandos
 │       └── templates/          ← templates de skills empacotados
 │           ├── prd.md
-│           ├── techspec.md
+│           ├── Specify.md
 │           ├── task.md
 │           ├── apply.md
 │           ├── verify.md
