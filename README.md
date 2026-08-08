@@ -88,6 +88,7 @@ nspec list
 
 ```bash
 nspec skills add --tool vscode
+nspec skills add --tool codex
 nspec skills add --tool claude --force
 nspec skills add --tool cursor --skill prd
 ```
@@ -96,6 +97,7 @@ nspec skills add --tool cursor --skill prd
 
 ```bash
 nspec skills remove --tool cursor
+nspec skills remove --tool codex --skill prd
 nspec skills remove --tool antigravity --yes
 nspec skills remove --tool vscode --skill prd
 ```
@@ -125,6 +127,17 @@ Cada prompt vira um comando em:
 ```text
 .claude/commands/<nome-da-skill>.md
 ```
+
+### OpenAI Codex
+
+Cada prompt vira uma skill local do repositório em:
+
+```text
+.agents/skills/<nome-da-skill>/SKILL.md
+```
+
+As skills podem ser usadas explicitamente no Codex com `$nome-da-skill` ou
+descobertas automaticamente a partir do campo `description`.
 
 ### Cursor
 
