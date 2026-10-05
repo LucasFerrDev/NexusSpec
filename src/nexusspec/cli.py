@@ -201,7 +201,11 @@ nspec task archive nome-da-feature           # arquiva feature concluída em fea
 nspec open                                   # abre o projeto no editor escolhido
 nspec skills add --tool vscode               # gera skills para a ferramenta escolhida
 nspec skills remove --tool vscode            # remove as skills da ferramenta escolhida
+nspec update                                 # regenera as skills instaladas com a versão atual
 ```
+
+Para atualizar a própria CLI: `uv tool upgrade nexusspec` ou
+`pip install -U git+https://github.com/LucasFerrDev/NexusSpec.git`.
 
 ## Estrutura
 
@@ -287,13 +291,17 @@ def _generate_skills_for_tool(
         ))
 
 
-def _tool_menu(
-    project_path: str,
-    on_tool_selected: Callable[[str, Path], None] | None = None,
-):
-    """Exibe o menu interativo de ferramentas e abre o projeto na escolhida."""
-    click.echo()
+def _detect_installed_tools(project_dir: Path) -> list[str]:
+    """Retorna as ferramentas que já têm diretório de skills no projeto."""
+    return [
+        tool_key
+        for tool_key, skills_dir in SKILLS_TOOL_DIRS.items()
+        if (project_dir / skills_dir).is_dir()
+    ]
 
+
+def _select_tool() -> str | None:
+    """Exibe o menu interativo de ferramentas e retorna a escolha (None = sair)."""
     tool_labels = [label for label, _ in TOOLS]
 
     choice = questionary.select(
@@ -303,13 +311,12 @@ def _tool_menu(
     ).ask()
 
     if choice is None or choice == "Sair":
-        click.echo(click.style("\n  Até logo!\n", fg="bright_black"))
-        return
+        return None
+    return choice
 
-    project_dir = Path(project_path)
-    if on_tool_selected is not None:
-        on_tool_selected(choice, project_dir)
 
+def _open_tool(choice: str, project_path: str) -> bool:
+    """Abre o projeto na ferramenta escolhida."""
     commands = next(cmds for label, cmds in TOOLS if label == choice)
 
     click.echo()
@@ -322,6 +329,25 @@ def _tool_menu(
         click.echo()
         click.echo(click.style("  ✗  Não foi possível abrir a ferramenta selecionada.", fg="red"))
         click.echo(click.style("     Verifique se ela está instalada.\n", fg="red"))
+    return success
+
+
+def _tool_menu(
+    project_path: str,
+    on_tool_selected: Callable[[str, Path], None] | None = None,
+):
+    """Exibe o menu interativo de ferramentas e abre o projeto na escolhida."""
+    click.echo()
+
+    choice = _select_tool()
+    if choice is None:
+        click.echo(click.style("\n  Até logo!\n", fg="bright_black"))
+        return
+
+    if on_tool_selected is not None:
+        on_tool_selected(choice, Path(project_path))
+
+    _open_tool(choice, project_path)
 
 
 # ---------------------------------------------------------------------------
@@ -905,15 +931,31 @@ def task_done(feature_name: str, task_selector: str, target: Path | None):
 # ---------------------------------------------------------------------------
 
 @main.command("update")
-@click.option("--force", is_flag=True, default=False, help="Sobrescreve skills com a versão mais recente.")
-def update(force: bool):
+@click.option(
+    "--tool",
+    "tool",
+    default=None,
+    type=click.Choice(sorted(SKILLS_TOOL_LABELS.keys()), case_sensitive=False),
+    help="Ferramenta alvo. Sem --tool, atualiza todas as ferramentas com skills instaladas.",
+)
+def update(tool: str | None):
     """
-    Atualiza as skills do projeto para a versão mais recente do NexusSpec.
+    Regenera as skills do projeto com os templates da versão instalada.
+
+    Sem --tool, detecta as ferramentas que já têm skills no projeto e
+    regenera todas, sobrescrevendo os arquivos existentes. Não abre o
+    editor (use  nspec open  para isso).
+
+    Este comando não atualiza a CLI em si. Para isso, use:
+
+    \b
+      uv tool upgrade nexusspec
+      pip install -U git+https://github.com/LucasFerrDev/NexusSpec.git
 
     \b
     Exemplos:
       nspec update
-      nspec update --force
+      nspec update --tool claude
     """
     target_dir = Path.cwd()
 
@@ -924,14 +966,18 @@ def update(force: bool):
     click.echo(click.style(BANNER, fg="cyan"))
     click.echo(click.style("  Atualizando skills...\n", fg="white"))
 
-    _tool_menu(
-        str(target_dir),
-        on_tool_selected=lambda choice, project_dir: _generate_skills_for_tool(
-            project_dir=project_dir,
-            tool_choice=choice,
-            overwrite=force,
-        ),
-    )
+    tool_keys = [tool.lower()] if tool else _detect_installed_tools(target_dir)
+    if not tool_keys:
+        click.echo(click.style("  ⚠  Nenhuma skill instalada encontrada neste projeto.", fg="yellow"))
+        click.echo(click.style("     Use  nspec skills add --tool <ferramenta>  para gerar.\n", fg="bright_black"))
+        return
+
+    for tool_key in tool_keys:
+        _generate_skills_for_tool(
+            project_dir=target_dir,
+            tool_choice=tool_key,
+            overwrite=True,
+        )
 
     click.echo()
 
