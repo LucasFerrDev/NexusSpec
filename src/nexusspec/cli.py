@@ -790,47 +790,114 @@ def task_archive(feature_name: str, target: Path | None):
     click.echo(click.style(f"     → features/done/{feature_name}/\n", fg="bright_black"))
 
 
-@task.command("done")
-@click.argument("task_id")
-def task_done(task_id: str):
+_PENDING_ITEM_RE = re.compile(r"^\s*-\s*\[ \]\s*(\S.*?)\s*$")
+_DONE_HEADING_RE = re.compile(r"^##\s+conclu[ií]do\s*$", re.IGNORECASE)
+_DONE_PLACEHOLDER_RE = re.compile(r"^\(vazio no início.*\)\s*$")
+
+
+def _find_pending_task(lines: list[str], selector: str) -> int:
+    """Retorna o índice da linha da task pendente correspondente ao seletor.
+
+    O seletor pode ser o número da task (1-based, contando só as pendentes)
+    ou um trecho do texto. Lança ValueError se não houver correspondência única.
     """
-    Marca uma tarefa como concluída no implementation_plan.md.
+    pending = [
+        (i, m.group(1)) for i, line in enumerate(lines)
+        if (m := _PENDING_ITEM_RE.match(line))
+    ]
+    if not pending:
+        raise ValueError("Nenhuma task pendente encontrada no task.md.")
+
+    if selector.isdigit():
+        position = int(selector)
+        if not 1 <= position <= len(pending):
+            raise ValueError(f"Índice {position} fora do intervalo (1-{len(pending)}).")
+        return pending[position - 1][0]
+
+    needle = selector.strip().lower()
+    exact = [i for i, text in pending if text.lower() == needle]
+    if len(exact) == 1:
+        return exact[0]
+    matches = [(i, text) for i, text in pending if needle in text.lower()]
+    if not matches:
+        raise ValueError(f"Nenhuma task pendente contém '{selector}'.")
+    if len(matches) > 1:
+        options = "\n".join(f"       - {text}" for _, text in matches)
+        raise ValueError(f"'{selector}' corresponde a mais de uma task:\n{options}")
+    return matches[0][0]
+
+
+def _mark_task_done(content: str, selector: str) -> tuple[str, str]:
+    """Marca a task como [x] e a move para a seção "## Concluído"."""
+    lines = content.splitlines()
+    index = _find_pending_task(lines, selector)
+    task_text = _PENDING_ITEM_RE.match(lines[index]).group(1)
+    del lines[index]
+    if 0 < index < len(lines) and not lines[index - 1].strip() and not lines[index].strip():
+        del lines[index]
+    # Remove o placeholder "(vazio no início ...)" gerado pela skill task
+    lines = [line for line in lines if not _DONE_PLACEHOLDER_RE.match(line)]
+    done_line = f"- [x] {task_text}"
+
+    heading = next((i for i, line in enumerate(lines) if _DONE_HEADING_RE.match(line)), None)
+    if heading is None:
+        while lines and not lines[-1].strip():
+            lines.pop()
+        lines += ["", "## Concluído", "", done_line]
+    else:
+        section_end = next(
+            (i for i in range(heading + 1, len(lines)) if lines[i].startswith("## ")),
+            len(lines),
+        )
+        insert_at = section_end
+        while insert_at > heading + 1 and not lines[insert_at - 1].strip():
+            insert_at -= 1
+        if insert_at == heading + 1:
+            lines.insert(insert_at, "")
+            insert_at += 1
+        lines.insert(insert_at, done_line)
+
+    return "\n".join(lines) + "\n", task_text
+
+
+@task.command("done")
+@click.argument("feature_name")
+@click.argument("task_selector")
+@click.option(
+    "--target",
+    type=click.Path(file_okay=False, path_type=Path),
+    default=None,
+    help="Diretório do projeto NexusSpec.",
+)
+def task_done(feature_name: str, task_selector: str, target: Path | None):
+    """
+    Marca uma task do task.md de uma feature como concluída.
+
+    A task pode ser indicada pelo número (contando só as pendentes, a partir
+    de 1) ou por um trecho do texto. O item é marcado como [x] e movido para
+    a seção "## Concluído".
 
     \b
     Exemplos:
-      nspec task done 001
-      nspec task done tarefa-001
+      nspec task done autenticacao-usuario 1
+      nspec task done autenticacao-usuario "criar endpoint de login"
     """
-    target_dir = Path.cwd()
-    plan_file = target_dir / "implementation_plan.md"
+    target_dir = target if target is not None else Path.cwd()
+    task_file = target_dir / SPECS_DIR / feature_name / "task.md"
 
-    # Normaliza o ID
-    tid = task_id.replace("tarefa-", "").zfill(3)
-
-    if not plan_file.exists():
-        click.echo(click.style("  ✗  implementation_plan.md não encontrado na raiz do projeto.", fg="red"))
-        click.echo(click.style("     Execute /plan.md no seu agente de IA para gerá-lo.", fg="bright_black"))
+    if not task_file.exists():
+        click.echo(click.style(f"  ✗  task.md não encontrado em features/specs/{feature_name}.", fg="red"))
         raise SystemExit(1)
 
-    content = plan_file.read_text(encoding="utf-8")
-
-    if f"tarefa-{tid}" not in content:
-        click.echo(click.style(f"  ✗  Tarefa tarefa-{tid} não encontrada no plano.", fg="red"))
+    try:
+        updated, task_text = _mark_task_done(task_file.read_text(encoding="utf-8"), task_selector)
+    except ValueError as exc:
+        click.echo(click.style(f"  ✗  {exc}", fg="red"))
         raise SystemExit(1)
 
-    # Substitui o status na linha da tarefa
-    updated = re.sub(
-        rf"(\| tarefa-{tid} \|[^|]+\|)\s*[⬜🔄✅][^\|]*(\|)",
-        rf"\1 ✅ concluída \2",
-        content,
-    )
-
-    if updated == content:
-        click.echo(click.style(f"  ⚠  Tarefa tarefa-{tid} já está marcada como concluída ou o formato da tabela é diferente.", fg="yellow"))
-        return
-
-    plan_file.write_text(updated, encoding="utf-8")
-    click.echo(click.style(f"\n  ✅  Tarefa tarefa-{tid} marcada como concluída!\n", fg="green"))
+    task_file.write_text(updated, encoding="utf-8")
+    click.echo(click.style(f"\n  ✅  Task concluída: {task_text}", fg="green"))
+    click.echo(click.style(f"     → {feature_name}: {_get_feature_progress(task_file.parent)}\n", fg="bright_black"))
 
 
 # ---------------------------------------------------------------------------
