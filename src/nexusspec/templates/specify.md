@@ -1,5 +1,5 @@
 ---
-name: techspec
+name: specify
 description: "[02] Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks."
 allowed-tools: Read, Write
 ---

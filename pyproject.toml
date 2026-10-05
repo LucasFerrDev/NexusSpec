@@ -1,6 +1,6 @@
 [project]
 name = "nexusspec"
-version = "0.1.0"
+version = "0.2.0"
 description = "CLI para inicializar projetos com o workflow NexusSpec (SDD)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -18,3 +18,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/nexusspec"]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "pyyaml>=6.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

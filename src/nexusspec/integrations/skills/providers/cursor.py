@@ -3,11 +3,13 @@
 from pathlib import Path
 
 from ..contracts.provider import GenerationReport, PromptTemplate
+from .shared.frontmatter import merge_frontmatter
 
 
+# Fallback (description, título) usado quando o template não tem description.
 PROMPT_METADATA: dict[str, tuple[str, str]] = {
     "prd": ("PRD generation assistant", "PRD Generator"),
-    "techspec": ("Technical specification assistant", "TechSpec Generator"),
+    "specify": ("Technical specification assistant", "Specify Generator"),
     "task": ("Task tracker generator", "Task Generator"),
     "apply": ("Task implementation assistant", "Apply Assistant"),
     "verify": ("Implementation verification assistant", "Verification Assistant"),
@@ -29,7 +31,7 @@ class CursorSkillProvider:
         skipped_files: list[Path] = []
 
         for prompt in prompts:
-            description, title = self._metadata_for(prompt.stem)
+            fallback_description, title = self._metadata_for(prompt.stem)
             rule_file = project_dir / ".cursor" / "rules" / f"{prompt.stem}.mdc"
             rule_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -37,15 +39,14 @@ class CursorSkillProvider:
                 skipped_files.append(rule_file)
                 continue
 
-            content = (
-                "---\n"
-                f"description: {description}\n"
-                "globs:\n"
-                '  - "**/*"\n'
-                "alwaysApply: false\n"
-                "---\n\n"
-                f"# Skill: {title}\n\n"
-                f"{prompt.content}"
+            content = merge_frontmatter(
+                prompt.content,
+                {
+                    "description": prompt.description or fallback_description,
+                    "globs": ["**/*"],
+                    "alwaysApply": "false",
+                },
+                body_prefix=f"# Skill: {title}\n\n",
             )
             rule_file.write_text(content, encoding="utf-8")
             created_files.append(rule_file)

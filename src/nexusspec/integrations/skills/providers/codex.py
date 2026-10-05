@@ -3,10 +3,15 @@
 from pathlib import Path
 
 from ..contracts.provider import GenerationReport, PromptTemplate
+from .shared.frontmatter import merge_frontmatter
 
 
 class CodexSkillProvider:
-    """Gera ``.agents/skills/<skill>/SKILL.md`` para cada prompt."""
+    """Gera ``.agents/skills/<skill>/SKILL.md`` para cada prompt.
+
+    O Codex exige ``name`` e ``description`` no frontmatter do SKILL.md; se o
+    template não os tiver, são preenchidos a partir do nome do arquivo.
+    """
 
     name = "Codex CLI"
 
@@ -27,7 +32,14 @@ class CodexSkillProvider:
                 skipped_files.append(skill_file)
                 continue
 
-            skill_file.write_text(prompt.content, encoding="utf-8")
+            content = merge_frontmatter(
+                prompt.content,
+                {
+                    "name": prompt.skill_name or prompt.stem,
+                    "description": prompt.description or f"NexusSpec skill: {prompt.stem}",
+                },
+            )
+            skill_file.write_text(content, encoding="utf-8")
             created_files.append(skill_file)
 
         return GenerationReport(

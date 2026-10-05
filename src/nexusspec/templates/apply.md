@@ -1,4 +1,5 @@
 ---
+name: apply
 description: "[04] Implementa todas as tasks pendentes em features/specs/"
 allowed-tools: read, write, edit, bash
 ---

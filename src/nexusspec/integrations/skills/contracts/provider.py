@@ -7,12 +7,18 @@ from typing import Protocol
 
 @dataclass(frozen=True)
 class PromptTemplate:
-    """Representa um template carregado do projeto ou do pacote."""
+    """Representa um template carregado do projeto ou do pacote.
+
+    ``skill_name`` e ``description`` vêm do frontmatter do template, quando
+    presentes; os providers usam valores próprios como fallback.
+    """
 
     name: str
     stem: str
     source_path: Path
     content: str
+    skill_name: str | None = None
+    description: str | None = None
 
 
 @dataclass(frozen=True)
