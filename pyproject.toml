@@ -1,6 +1,6 @@
 [project]
 name = "nexusspec"
-version = "0.1.0"
+version = "0.2.0"
 description = "CLI para inicializar projetos com o workflow NexusSpec (SDD)"
 readme = "README.md"
 requires-python = ">=3.11"

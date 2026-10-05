@@ -308,6 +308,7 @@ NexusSpec/
 │           ├── apply.md
 │           └── verify.md
 ├── tests/                            ← suíte pytest
+├── CHANGELOG.md
 ├── docs/
 │   └── tutorial.md
 ├── pyproject.toml
