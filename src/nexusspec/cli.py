@@ -777,13 +777,15 @@ def task_status(target: Path | None):
     default=None,
     help="Diretório do projeto NexusSpec.",
 )
-def task_archive(feature_name: str, target: Path | None):
+@click.option("--yes", is_flag=True, default=False, help="Arquiva sem confirmação mesmo com tasks pendentes.")
+def task_archive(feature_name: str, target: Path | None, yes: bool):
     """
     Move uma feature concluída de features/specs para features/done.
 
     \b
     Exemplos:
       nspec task archive autenticacao-usuario
+      nspec task archive autenticacao-usuario --yes
     """
     target_dir = target if target is not None else Path.cwd()
     source = target_dir / SPECS_DIR / feature_name
@@ -797,7 +799,6 @@ def task_archive(feature_name: str, target: Path | None):
         click.echo(click.style(f"  ✗  Já existe '{feature_name}' em features/done.", fg="yellow"))
         raise SystemExit(1)
 
-    import shutil
     task_file = source / "task.md"
     if task_file.exists():
         pending = task_file.read_text(encoding="utf-8").count("[ ]")
@@ -810,6 +811,9 @@ def task_archive(feature_name: str, target: Path | None):
                 "     execute apply.md e verify.md antes de arquivar.\n",
                 fg="bright_black"
             ))
+            if not yes and not click.confirm("Arquivar mesmo assim?", default=False):
+                click.echo(click.style("  Operação cancelada.", fg="bright_black"))
+                return
 
     shutil.move(str(source), str(dest))
     click.echo(click.style(f"\n  ✅  '{feature_name}' arquivada com sucesso!\n", fg="green"))
