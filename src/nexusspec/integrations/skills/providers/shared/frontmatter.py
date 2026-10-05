@@ -79,11 +79,15 @@ def render_frontmatter(fields: dict[str, FrontmatterValue]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def merge_frontmatter(content: str, fields: dict[str, FrontmatterValue]) -> str:
+def merge_frontmatter(
+    content: str,
+    fields: dict[str, FrontmatterValue],
+    body_prefix: str = "",
+) -> str:
     """Gera um único frontmatter: ``fields`` primeiro (com precedência), depois as
-    demais chaves já presentes no template, seguido do corpo do template."""
+    demais chaves já presentes no template, seguido de ``body_prefix`` e do corpo."""
     existing, body = split_frontmatter(content)
     merged = dict(fields)
     for key, value in existing.items():
         merged.setdefault(key, value)
-    return f"{render_frontmatter(merged)}\n{body}"
+    return f"{render_frontmatter(merged)}\n{body_prefix}{body}"

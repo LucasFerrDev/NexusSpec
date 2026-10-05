@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from ..contracts.provider import GenerationReport, PromptTemplate
-from .shared.frontmatter import merge_frontmatter, split_frontmatter
+from .shared.frontmatter import merge_frontmatter
 
 
 class CodexSkillProvider:
@@ -32,13 +32,11 @@ class CodexSkillProvider:
                 skipped_files.append(skill_file)
                 continue
 
-            metadata, _ = split_frontmatter(prompt.content)
             content = merge_frontmatter(
                 prompt.content,
                 {
-                    "name": metadata.get("name") or prompt.stem,
-                    "description": metadata.get("description")
-                    or f"NexusSpec skill: {prompt.stem}",
+                    "name": prompt.skill_name or prompt.stem,
+                    "description": prompt.description or f"NexusSpec skill: {prompt.stem}",
                 },
             )
             skill_file.write_text(content, encoding="utf-8")

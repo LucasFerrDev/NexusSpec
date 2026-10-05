@@ -4,6 +4,30 @@ from importlib.resources import files
 from pathlib import Path
 
 from ...contracts.provider import PromptTemplate
+from .frontmatter import split_frontmatter
+
+
+def read_template_metadata(content: str) -> tuple[str | None, str | None]:
+    """Lê ``name`` e ``description`` do frontmatter YAML de um template."""
+    fields, _ = split_frontmatter(content)
+    name = fields.get("name")
+    description = fields.get("description")
+    return (
+        name if isinstance(name, str) and name else None,
+        description if isinstance(description, str) and description else None,
+    )
+
+
+def _build_template(name: str, source_path: Path, content: str) -> PromptTemplate:
+    skill_name, description = read_template_metadata(content)
+    return PromptTemplate(
+        name=name,
+        stem=Path(name).stem,
+        source_path=source_path,
+        content=content,
+        skill_name=skill_name,
+        description=description,
+    )
 
 
 def _load_from_package() -> list[PromptTemplate]:
@@ -15,12 +39,7 @@ def _load_from_package() -> list[PromptTemplate]:
         if entry.name.startswith("_"):
             continue
         templates.append(
-            PromptTemplate(
-                name=entry.name,
-                stem=Path(entry.name).stem,
-                source_path=Path(entry.name),
-                content=entry.read_text(encoding="utf-8"),
-            )
+            _build_template(entry.name, Path(entry.name), entry.read_text(encoding="utf-8"))
         )
     return templates
 
@@ -34,11 +53,6 @@ def load_prompt_templates(project_dir: Path, prompts_dir: str = "prompts") -> li
     templates: list[PromptTemplate] = []
     for prompt_file in sorted(base_dir.glob("*.md")):
         templates.append(
-            PromptTemplate(
-                name=prompt_file.name,
-                stem=prompt_file.stem,
-                source_path=prompt_file,
-                content=prompt_file.read_text(encoding="utf-8"),
-            )
+            _build_template(prompt_file.name, prompt_file, prompt_file.read_text(encoding="utf-8"))
         )
     return templates

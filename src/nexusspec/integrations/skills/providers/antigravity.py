@@ -3,6 +3,9 @@
 from pathlib import Path
 
 from ..contracts.provider import GenerationReport, PromptTemplate
+from .shared.frontmatter import merge_frontmatter
+
+DEFAULT_DESCRIPTION = "Skill generated automatically by NexusSpec"
 
 
 class AntigravitySkillProvider:
@@ -27,12 +30,12 @@ class AntigravitySkillProvider:
                 skipped_files.append(skill_file)
                 continue
 
-            content = (
-                "---\n"
-                f"name: {prompt.stem}\n"
-                "description: Skill generated automatically by NexusSpec\n"
-                "---\n\n"
-                f"{prompt.content}"
+            content = merge_frontmatter(
+                prompt.content,
+                {
+                    "name": prompt.skill_name or prompt.stem,
+                    "description": prompt.description or DEFAULT_DESCRIPTION,
+                },
             )
             skill_file.write_text(content, encoding="utf-8")
             created_files.append(skill_file)
