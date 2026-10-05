@@ -45,7 +45,7 @@ MENU_STYLE = Style([
 
 TOOLS: list[tuple[str, list[tuple[str, bool]]]] = [
     ("Antigravity",   [("antigravity", False)]),
-    ("Claude Code",   [("claude", True)]),
+    ("Claude Code",   [("claude", False)]),
     ("Codex CLI",     [("codex", False)]),
     ("Cursor",        [("cursor", True)]),
     ("VSCode", [
@@ -232,10 +232,11 @@ def _try_open(commands: list[tuple[str, bool]], project_path: str) -> bool:
         if requires_path:
             parts.append(project_path)
         try:
-            if parts[0] == "codex":
-                # O Codex e interativo: ele precisa herdar o terminal atual. O
-                # projeto e definido pelo diretorio de trabalho, pois um caminho
-                # posicional seria interpretado pelo CLI como um prompt.
+            if parts[0] in ("codex", "claude"):
+                # Codex e Claude Code sao interativos: precisam herdar o
+                # terminal atual. O projeto e definido pelo diretorio de
+                # trabalho, pois um caminho posicional seria interpretado
+                # pelo CLI como um prompt.
                 result = subprocess.run(parts, cwd=project_path)
             else:
                 result = subprocess.run(
