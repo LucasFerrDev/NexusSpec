@@ -7,7 +7,7 @@ from ..contracts.provider import GenerationReport, PromptTemplate
 
 PROMPT_METADATA: dict[str, tuple[str, str]] = {
     "prd": ("PRD generation assistant", "PRD Generator"),
-    "techspec": ("Technical specification assistant", "TechSpec Generator"),
+    "specify": ("Technical specification assistant", "Specify Generator"),
     "task": ("Task tracker generator", "Task Generator"),
     "apply": ("Task implementation assistant", "Apply Assistant"),
     "verify": ("Implementation verification assistant", "Verification Assistant"),

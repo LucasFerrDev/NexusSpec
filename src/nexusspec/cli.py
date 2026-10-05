@@ -187,7 +187,7 @@ As skills do NexusSpec foram instaladas na sua ferramenta de IA durante o `init`
 Use-as diretamente pelo seu agente na seguinte ordem:
 
 1. **prd** — defina o produto, personas e métricas
-2. **techspec** — defina stack, tecnologias e design da feature
+2. **specify** — defina stack, tecnologias e design da feature
 3. **task** — gere o checklist de implementação da feature
 4. **apply** — implemente todas as tasks pendentes automaticamente
 5. **verify** — valide a implementação e arquive quando aprovado
@@ -653,11 +653,11 @@ def task_new(name: str | None, target: Path | None):
 
     _scaffold_file(
         feature_dir / "spec.md",
-        f"# Spec — {name}\n\n> Execute a skill techspec na sua ferramenta de IA.\n",
+        f"# Spec — {name}\n\n> Execute a skill specify na sua ferramenta de IA.\n",
     )
     _scaffold_file(
         feature_dir / "design.md",
-        f"# Design — {name}\n\n> Gerado pelo techspec.md.\n",
+        f"# Design — {name}\n\n> Gerado pela skill specify.\n",
     )
     _scaffold_file(
         feature_dir / "task.md",
@@ -681,7 +681,7 @@ def task_new(name: str | None, target: Path | None):
 
     click.echo()
     click.echo(click.style("  Próximo passo no seu agente de IA:", fg="white"))
-    click.echo(click.style("    techspec", fg="cyan"))
+    click.echo(click.style("    specify", fg="cyan"))
     click.echo()
 
 
@@ -879,7 +879,7 @@ def list_templates():
     click.echo(click.style("\n  Skills disponíveis no NexusSpec:\n", fg="cyan", bold=True))
     descriptions = {
         "prd":      "Gera o PRD principal do produto",
-        "techspec": "Gera a TechSpec de uma feature",
+        "specify":  "Gera a spec técnica de uma feature",
         "task":     "Gera o checklist de implementação",
         "apply":    "Implementa tasks pendentes automaticamente",
         "verify":   "Verifica implementação contra a spec",
