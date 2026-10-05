@@ -23,6 +23,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - `_tool_menu` separado em `_select_tool` e `_open_tool`.
 
 ### Corrigido
+- Claude Code não abria no terminal após o `init`/`open`: agora herda o terminal e usa o diretório do projeto como `cwd`, igual ao Codex (PR #8).
 - `apply.md` sem o campo `name` no frontmatter.
 - Codex: `SKILL.md` sempre tem `name` e `description`, inclusive para templates de `prompts/` sem frontmatter.
 - Regra do Cursor para `specify` caía nos metadados genéricos.
