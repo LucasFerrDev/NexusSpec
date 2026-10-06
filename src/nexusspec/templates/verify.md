@@ -1,44 +1,23 @@
 ---
 name: verify
 description: "[05] Valida a implementação das features e recomenda arquivamento."
-allowed-tools: Read, Bash
+allowed-tools: Read, Write, Bash
 ---
 
 Você é um engenheiro de qualidade.
 
-Antes de começar, faça as perguntas abaixo **uma de cada vez**, aguardando minha resposta.
-Após cada resposta, confirme o que entendeu antes de prosseguir.
+Esta skill **não faz perguntas iniciais**.
 
-**Pergunta 1:** Qual o escopo da verificação?
+## Escopo
 
-1. Verificar todas as features em features/specs/
-2. Verificar apenas as features com task.md 100% concluído
-3. Verificar uma feature específica
-4. Verificar apenas as alteradas desde o último verify
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 2:** Qual o nível de rigor da validação?
-
-1. Verificar apenas se os arquivos foram criados
-2. Verificar se a implementação cobre os critérios do spec.md
-3. Verificar spec.md, design.md e rodar os testes existentes
-4. Verificação completa incluindo cobertura de testes e edge cases
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 3:** Se encontrar tasks ainda pendentes durante o verify, o que devo fazer?
-
-1. Reportar e interromper o verify da feature
-2. Reportar e continuar verificando o que foi implementado
-3. Reportar e sugerir rodar o apply antes de continuar
-4. Ignorar e verificar apenas o que foi implementado
-
-> Digite o número de uma opção ou descreva com suas palavras:
+- Se o usuário indicou uma feature ao chamar a skill (ex: "verify autenticacao"),
+  verifique apenas ela.
+- Caso contrário, verifique as features em `features/specs/` cujo `task.md` está
+  100% concluído (nenhum item `[ ]`). Liste as demais como "em andamento", sem validá-las.
 
 ## Passo 1 — Inventário
 
-Leia todas as pastas em `features/specs/`. Para cada feature:
+Para cada feature do escopo:
 
 1. Abra o `task.md`
 2. Conte itens `[x]` e `[ ]`
@@ -46,19 +25,24 @@ Leia todas as pastas em `features/specs/`. Para cada feature:
 
 ## Passo 2 — Validação
 
-Para cada feature encontrada:
+Para cada feature do escopo:
 
 1. Leia `spec.md` e `design.md` para entender o esperado
-2. Valide se a implementação atende a spec e o design
-3. Se possível, execute um teste simples para validar o comportamento
+2. Verifique, critério a critério, se a implementação atende cada Given/When/Then do `spec.md`
+3. Confira se os casos de borda e erros do `spec.md` foram tratados
+4. Rode os testes existentes do projeto e registre o resultado
 
 ## Passo 3 — Relatório por feature
 
-Exiba um relatório para cada feature com:
+Exiba um relatório para cada feature e salve-o em `features/specs/[nome-da-feature]/verify.md`
+(substituindo o conteúdo anterior), com:
 
-- Itens concluídos
-- Itens pendentes
+- Data da verificação
+- Itens concluídos e pendentes
+- Critérios do `spec.md` atendidos e não atendidos
+- Resultado dos testes
 - Resultado da validação (✅ aprovado / ⚠️ parcial / ❌ reprovado)
+- Para ⚠️ ou ❌: o que precisa ser corrigido
 
 ## Recomendação final do verify
 
@@ -70,3 +54,10 @@ Ao final da validação, exibir para cada feature aprovada:
 Para features com pendências:
 
 > ⚠ [nome-da-feature] com X task(s) pendente(s). Execute apply antes de arquivar.
+
+Para features reprovadas:
+
+> ❌ [nome-da-feature] reprovada. Veja `features/specs/[nome-da-feature]/verify.md`,
+> ajuste as tasks e execute apply novamente.
+
+Não modifique código nem o `task.md` — apenas o `verify.md` da feature.

@@ -16,6 +16,13 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - README: comandos `open`, `update` e `task`, override via `prompts/` e a seção "Como funciona a geração de skills".
 
 ### Alterado
+- Perguntas das skills reduzidas de 29 para 7 (+1 condicional): o usuário define o "o quê"
+  (problema, comportamento, limites) e a IA infere o "como" a partir dos docs e do código,
+  apresentando checkpoints de aprovação. prd: 7 → 4; specify: 13 → 3 (+ stack só em projeto
+  vazio); task, apply e verify: 3 → 0.
+- specify passa a perguntar comportamento e critérios de aceite (antes inexistente) e não
+  repete a stack a cada feature; prd passa a cobrir restrições e fora do escopo.
+- verify grava o relatório em `features/specs/<feature>/verify.md`.
 - Nome da skill padronizado como `specify` (frontmatter do template, `nspec list`, README gerado, `task new` e metadados do Cursor).
 - `nspec update` só regenera as skills, sempre sobrescrevendo, e não abre mais o editor. A opção `--force` foi removida.
 - Cursor, Antigravity e Codex usam a `description` do template; os valores fixos anteriores viraram fallback.

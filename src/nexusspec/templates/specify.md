@@ -1,158 +1,67 @@
 ---
 name: specify
-description: "[02] Gera a TechSpec técnica de uma feature. Execute após ter o PRD e antes de criar as tasks."
+description: "[02] Gera a especificação (spec.md) e o design técnico (design.md) de uma feature. Execute após ter o PRD e antes de criar as tasks."
 allowed-tools: Read, Write
 ---
 
 Você é um engenheiro sênior.
 
-Seu objetivo é:
-1. Capturar as informações de arquitetura geral do projeto (stack e tecnologias)
-2. Escrever/atualizar o arquivo `docs/architecture/architecture.md` com essas informações
-3. Criar ou atualizar a TechSpec de uma feature específica
+Seu papel é transformar a intenção do usuário em uma especificação verificável.
+O usuário define **o que** a feature faz; você propõe **como** implementá-la a partir
+dos documentos e do código existentes.
 
-Antes de começar, leia:
+## Passo 1 — Contexto (sem perguntas)
+
+Leia antes de começar:
 - `docs/prd/prd.md`
 - `docs/architecture/architecture.md`
-- O arquivo `features/specs/[nome-da-feature]/spec.md` se já existir
+- O código do repositório (estrutura de pastas, arquivos de dependências como
+  `package.json`, `pyproject.toml`, `go.mod`, `pom.xml`, e os padrões existentes)
 
-## Stack e tecnologias
+Identifique a feature:
+- Liste as pastas em `features/specs/`.
+- Se houver só uma pasta cujo `spec.md` ainda não foi preenchido, use-a.
+- Se houver mais de uma candidata, pergunte qual especificar.
+- Se não houver nenhuma, peça para o usuário executar `nspec task new --name <nome-da-feature>`.
 
-Antes de gerar a spec, defina e documente:
+Identifique a stack:
+- Se `docs/architecture/architecture.md` já descreve a stack, use-a.
+- Senão, infira a stack a partir do código.
+- Somente se não houver stack documentada **nem** código no repositório, faça a pergunta condicional abaixo.
 
-- Linguagem(ns) principal(is)
-- Framework(s) de backend e frontend
-- Banco de dados
-- Ferramentas de teste
-- Outras dependências relevantes
+## Passo 2 — Perguntas
 
-Registre essas decisões no topo do `design.md` gerado, em uma seção chamada `## Stack`.
+Faça as perguntas abaixo **uma de cada vez**, aguardando a resposta antes de continuar.
+Ofereça 2-3 sugestões baseadas no PRD como ponto de partida, deixando claro que o
+usuário pode responder livremente.
 
-Faça as perguntas **uma de cada vez** com sugestões contextuais.
-Após cada resposta, confirme o que entendeu antes de prosseguir.
+**Pergunta 1:** O que esta feature deve fazer? Descreva o fluxo principal e como você
+saberá que ela está pronta (critérios de aceite).
 
----
+**Pergunta 2:** Que regras de negócio, erros ou casos de borda ela precisa tratar?
 
-**Pergunta 1:** Qual é o nome da feature? (use o mesmo nome da pasta em features/specs)
+**Pergunta 3:** Existe alguma decisão técnica já tomada ou restrição para esta feature?
+(biblioteca obrigatória, integração externa, algo que não pode mudar — pode responder "não")
 
-1. autenticacao-usuario
-2. pagamento
-3. notificacoes
-4. relatorios
+**Pergunta condicional — apenas se não houver stack documentada nem código:**
+Qual stack você quer usar? (linguagem, framework de backend/frontend, banco de dados, ferramenta de testes)
 
-> Digite o número de uma opção ou descreva com suas palavras:
+## Passo 3 — Checkpoint do design
 
-**Pergunta 2:** Esta feature é frontend, backend ou ambos?
+Antes de gravar qualquer arquivo, apresente uma proposta curta com:
 
-1. Apenas backend
-2. Apenas frontend
-3. Ambos (frontend + backend)
-4. Infra/DevOps (sem UI)
+- Critérios de aceite que você entendeu (em Given/When/Then)
+- Abordagem técnica e trade-offs
+- Arquivos que serão criados ou modificados (com base na análise do código)
+- Modelo de dados e contrato de interface, se aplicável
+- Estratégia de testes, seguindo o padrão já usado no projeto
+- Principais riscos
 
-> Digite o número de uma opção ou descreva com suas palavras:
+Pergunte se o usuário aprova. Ajuste o que ele corrigir e só então gere os arquivos.
 
-**Pergunta 3:** Qual é a linguagem principal do projeto?
+## Passo 4 — Arquivos
 
-1. TypeScript / JavaScript
-2. Python
-3. Go
-4. Java / Kotlin
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 4:** Qual é o framework de backend?
-
-1. Node.js com Express ou Fastify
-2. Python com FastAPI ou Django
-3. Go com Gin ou Fiber
-4. Java com Spring Boot
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 5:** Qual é o framework de frontend?
-
-1. React com Next.js
-2. Vue com Nuxt
-3. Angular
-4. Apenas backend / API (sem frontend)
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 6:** Qual é o banco de dados principal?
-
-1. PostgreSQL
-2. MySQL / MariaDB
-3. MongoDB
-4. SQLite (projetos menores ou locais)
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 7:** Quais ferramentas de teste serão usadas?
-
-1. Unitários (Jest/Pytest) + integração
-2. Apenas unitários
-3. Apenas integração/E2E
-4. Sem testes automatizados no primeiro ciclo
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 8:** Qual é a abordagem de design da feature?
-
-1. API REST com endpoints convencionais
-2. GraphQL
-3. Event-driven com filas ou mensageria
-4. Processamento em background / workers
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 9:** Quais arquivos existentes serão modificados?
-
-1. Apenas novos arquivos (sem mudanças em existentes)
-2. Rotas/API e serviços
-3. Componentes de UI e páginas
-4. Configurações e infraestrutura
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 10:** Esta feature introduz novos modelos de dados ou altera existentes?
-
-1. Cria novos modelos
-2. Altera modelos existentes
-3. Apenas leitura, sem alterações
-4. Não envolve dados persistentes
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 11:** Existe integração com serviços externos ou APIs?
-
-1. Não, é totalmente interna
-2. Sim, autenticação (OAuth/SSO)
-3. Sim, pagamentos/faturamento
-4. Sim, webhooks/integrações diversas
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 12:** Quais são os maiores riscos técnicos?
-
-1. Escalabilidade e performance
-2. Migração de dados e compatibilidade
-3. Complexidade de integrações externas
-4. Observabilidade e confiabilidade
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 13:** Como será testada?
-
-1. Testes unitários e de integração
-2. Testes automatizados end-to-end
-3. Testes manuais com checklist
-4. Testes existentes + smoke tests
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
----
-
-Com base nas respostas, gere e salve:
+Com base nas respostas e no design aprovado, gere e salve:
 
 **`features/specs/[nome-da-feature]/spec.md`** com:
 - Comportamento esperado em formato Given/When/Then
@@ -168,17 +77,9 @@ Com base nas respostas, gere e salve:
 7. Riscos e mitigações
 8. Diagrama em Mermaid (fluxo ou estados, conforme a feature)
 
-Arquivos gerados:
-- `features/specs/[nome-da-feature]/spec.md`
-- `features/specs/[nome-da-feature]/design.md`
-
-Escreva em português.
-
-Ao finalizar todas as perguntas e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `task`.
-
---
-
-Após coletar todas as informações, **crie e salve o arquivo `docs/architecture/architecture.md`** com o seguinte conteúdo:
+Se `docs/architecture/architecture.md` ainda não descreve a stack, ou se esta feature
+introduz algo novo (banco, integração, padrão), crie ou atualize o arquivo no formato abaixo.
+Não repita a stack no `design.md` — referencie o `architecture.md`.
 
 ```markdown
 # Arquitetura do Projeto: [nome-do-projeto]
@@ -239,5 +140,14 @@ Após coletar todas as informações, **crie e salve o arquivo `docs/architectur
 ---
 
 **Última atualização:** [Data]
-**Atualizado por:** [Seu nome via TechSpec Skill]
+**Atualizado por:** skill specify
 ```
+
+Arquivos gerados:
+- `features/specs/[nome-da-feature]/spec.md`
+- `features/specs/[nome-da-feature]/design.md`
+- `docs/architecture/architecture.md` (quando criado ou atualizado)
+
+Escreva em português.
+
+Ao finalizar e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `task`.
