@@ -1,6 +1,6 @@
 ---
 name: verify
-description: "[05] Valida a implementação das features e recomenda arquivamento."
+description: "[05] Valida a implementação das features e arquiva as aprovadas em features/done/."
 allowed-tools: Read, Write, Bash
 ---
 
@@ -44,12 +44,25 @@ Exiba um relatório para cada feature e salve-o em `features/specs/[nome-da-feat
 - Resultado da validação (✅ aprovado / ⚠️ parcial / ❌ reprovado)
 - Para ⚠️ ou ❌: o que precisa ser corrigido
 
-## Recomendação final do verify
+## Passo 4 — Arquivamento das features aprovadas
 
-Ao final da validação, exibir para cada feature aprovada:
+Depois de salvar o `verify.md`, mova **somente** as features com resultado ✅ aprovado
+(todas as tasks `[x]`, critérios do `spec.md` atendidos e testes passando) de
+`features/specs/` para `features/done/`:
 
-> ✅ [nome-da-feature] aprovada.  
-> Para arquivar, execute: `nspec task archive [nome-da-feature]`
+1. Execute `nspec task archive [nome-da-feature] --yes`.
+2. Se o comando `nspec` não estiver disponível, mova a pasta diretamente
+   (`mv features/specs/[nome-da-feature] features/done/[nome-da-feature]`).
+3. Se já existir uma pasta com o mesmo nome em `features/done/`, não sobrescreva:
+   informe o conflito e deixe a feature em `features/specs/`.
+
+Features ⚠️ parciais ou ❌ reprovadas **nunca** são movidas.
+
+## Resumo final do verify
+
+Para cada feature aprovada e arquivada:
+
+> ✅ [nome-da-feature] aprovada e arquivada em `features/done/[nome-da-feature]/`.
 
 Para features com pendências:
 
@@ -60,4 +73,5 @@ Para features reprovadas:
 > ❌ [nome-da-feature] reprovada. Veja `features/specs/[nome-da-feature]/verify.md`,
 > ajuste as tasks e execute apply novamente.
 
-Não modifique código nem o `task.md` — apenas o `verify.md` da feature.
+Não modifique código nem o `task.md`. As únicas alterações permitidas são gravar o
+`verify.md` da feature e mover as features aprovadas para `features/done/`.

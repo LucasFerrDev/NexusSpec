@@ -91,14 +91,17 @@ nspec task done autenticacao-usuario "login"    # por um trecho do texto
 
 Execute a skill **verify** (opcionalmente indicando a feature). Ela confere a
 implementação contra cada critério do `spec.md`, roda os testes, salva o relatório
-em `features/specs/<feature>/verify.md` e recomenda o arquivamento das aprovadas.
+em `verify.md` e **move as features aprovadas para `features/done/`**, junto com o
+relatório. Features parciais ou reprovadas continuam em `features/specs/` com o
+`verify.md` explicando o que falta.
+
+Para arquivar manualmente (por exemplo, uma feature que você decidiu encerrar):
 
 ```bash
 nspec task archive autenticacao-usuario
 ```
 
-A feature vai para `features/done/`. Se ainda houver tasks pendentes, a CLI
-pede confirmação (use `--yes` para pular).
+Se ainda houver tasks pendentes, a CLI pede confirmação (use `--yes` para pular).
 
 ## Manter as skills atualizadas
 

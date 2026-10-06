@@ -263,7 +263,7 @@ Depois de rodar `nspec init`, use as skills instaladas na sua ferramenta de IA n
 2. **specify** — escolhe uma feature do backlog, cria `features/specs/[feature]/` e gera `spec.md` e `design.md`
 3. **task** — gera `features/specs/[feature]/task.md`
 4. **apply** — implementa as tasks pendentes
-5. **verify** — valida a implementação e recomenda arquivamento
+5. **verify** — valida a implementação e move as features aprovadas para `features/done/`
 
 Detalhes e exemplos no [tutorial](docs/tutorial.md).
 
