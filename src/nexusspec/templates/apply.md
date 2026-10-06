@@ -45,7 +45,7 @@ Se o repositório não usa git, informe que não haverá commits.
 Para cada feature confirmada, na ordem em que as tasks aparecem no `task.md`:
 
 1. Leia o `spec.md` e o `design.md` da feature para entender o contexto
-2. Implemente a task
+2. Implemente a task respeitando a estrutura de pastas do `architecture.md`
 3. Rode os testes existentes relacionados; se falharem, corrija antes de seguir
 4. Após implementar com sucesso, atualize o `task.md`:
    - Mova o item de `[ ]` para `[x]`
@@ -69,6 +69,10 @@ Próximo passo: execute a skill verify para validar a implementação.
 
 ## Regras
 
+- Código de servidor/API fica em `backend/` e código de interface fica em `frontend/`,
+  conforme a seção "Estrutura do Projeto" do `docs/architecture/architecture.md`.
+  Nunca crie código da aplicação na raiz do repositório. Se o projeto já tinha outra
+  estrutura documentada, siga-a e não mova arquivos existentes.
 - Implemente uma task por vez, na ordem do `task.md`
 - Não pule tasks sem implementar
 - Não arquive features — isso é responsabilidade da skill verify + usuário

@@ -25,6 +25,9 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - verify grava o relatório em `features/specs/<feature>/verify.md`.
 - prd grava o backlog de features em `docs/architecture/epics.md`; specify lista as
   features do backlog sem spec e cria a pasta da escolhida, sem precisar do terminal.
+- Estrutura de pastas padrão: código de servidor/API em `backend/` e de interface em
+  `frontend/` (specify define no `architecture.md`, task indica o caminho, apply segue e
+  verify confere). Projetos com código existente mantêm a estrutura atual.
 - verify move automaticamente as features aprovadas para `features/done/` (via
   `nspec task archive --yes`, com fallback para mover a pasta); parciais e reprovadas ficam.
 - `nspec task new` passa a ser opcional e gera o nome da pasta sem acentos

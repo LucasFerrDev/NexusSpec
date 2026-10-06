@@ -51,12 +51,21 @@ Ao definir a feature:
 3. Se a feature for nova (não estava no `epics.md`), adicione-a ao `epics.md` na área
    adequada, sem alterar as demais linhas.
 
-## Passo 3 — Stack
+## Passo 3 — Stack e estrutura de pastas
 
 Identifique a stack:
 - Se `docs/architecture/architecture.md` já descreve a stack, use-a.
 - Senão, infira a stack a partir do código.
 - Somente se não houver stack documentada **nem** código no repositório, faça a pergunta condicional abaixo.
+
+Defina a estrutura de pastas do código (regra do NexusSpec):
+- Código de interface fica em `frontend/` e código de servidor/API fica em `backend/`,
+  ambos na raiz do repositório. Nunca coloque código da aplicação na raiz.
+- Crie apenas as pastas que o projeto usa: um projeto só com API tem só `backend/`;
+  um projeto só com interface tem só `frontend/`.
+- Se o repositório **já tem código** organizado de outra forma, siga a estrutura existente
+  e não mova arquivos; registre essa estrutura no `architecture.md`.
+- Se o usuário pedir outra organização na Pergunta 3, siga a decisão dele.
 
 ## Passo 4 — Perguntas
 
@@ -81,7 +90,8 @@ Antes de gravar qualquer arquivo, apresente uma proposta curta com:
 
 - Critérios de aceite que você entendeu (em Given/When/Then)
 - Abordagem técnica e trade-offs
-- Arquivos que serão criados ou modificados (com base na análise do código)
+- Arquivos que serão criados ou modificados, com o caminho completo a partir da raiz
+  (ex: `backend/src/routes/login.ts`, `frontend/src/pages/Login.tsx`)
 - Modelo de dados e contrato de interface, se aplicável
 - Estratégia de testes, seguindo o padrão já usado no projeto
 - Principais riscos
@@ -98,7 +108,7 @@ Com base nas respostas e no design aprovado, gere e salve:
 
 **`features/specs/[nome-da-feature]/design.md`** com:
 1. Resumo técnico e trade-offs
-2. Componentes criados ou modificados
+2. Componentes criados ou modificados, com o caminho completo (`backend/...` ou `frontend/...`)
 3. Modelo de dados (se aplicável)
 4. Contrato de interface (se aplicável): endpoint, request, response
 5. Ordem de implementação (passos numerados)
@@ -145,7 +155,15 @@ Não repita a stack no `design.md` — referencie o `architecture.md`.
 [Explicar o padrão usado: MVC, Hexagonal, DDD, etc]
 
 ### Estrutura do Projeto
-[Descrever a organização de diretórios e pacotes]
+```
+[nome-do-projeto]/
+├── backend/        ← servidor/API: [framework] ([organização interna, ex: src/routes, src/services])
+├── frontend/       ← interface: [framework] ([organização interna, ex: src/pages, src/components])
+├── docs/           ← PRD e arquitetura (NexusSpec)
+└── features/       ← specs das features (NexusSpec)
+```
+[Omitir backend/ ou frontend/ se o projeto não tiver essa parte. Se o projeto já
+tinha outra estrutura, descreva a estrutura existente.]
 
 ### Comunicação entre Componentes
 [Explicar como frontend e backend se comunicam, protocolos usados, etc]

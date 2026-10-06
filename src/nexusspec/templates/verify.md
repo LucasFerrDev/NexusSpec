@@ -30,7 +30,9 @@ Para cada feature do escopo:
 1. Leia `spec.md` e `design.md` para entender o esperado
 2. Verifique, critério a critério, se a implementação atende cada Given/When/Then do `spec.md`
 3. Confira se os casos de borda e erros do `spec.md` foram tratados
-4. Rode os testes existentes do projeto e registre o resultado
+4. Confira se o código está na estrutura de pastas do `architecture.md`
+   (`backend/` e `frontend/`); arquivos fora dela tornam o resultado ⚠️ parcial
+5. Rode os testes existentes do projeto e registre o resultado
 
 ## Passo 3 — Relatório por feature
 

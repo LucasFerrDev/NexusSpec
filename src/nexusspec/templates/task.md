@@ -28,7 +28,9 @@ Esta skill **não faz perguntas** sobre o conteúdo das tasks — tudo vem do `d
 - **Testes:** siga a estratégia da seção "Testes" do `design.md`. Inclua as tasks de
   teste junto da task que implementa o comportamento testado.
 - **Rastreabilidade:** todo critério de aceite do `spec.md` deve ser coberto por ao menos uma task.
-- Escreva cada task como uma ação objetiva, começando com verbo (ex: "Criar endpoint POST /login").
+- Escreva cada task como uma ação objetiva, começando com verbo e indicando onde o código
+  fica, conforme a estrutura do `architecture.md`
+  (ex: "Criar endpoint POST /login em `backend/src/routes/auth.ts`").
 
 ## Checkpoint — aprovação do checklist
 

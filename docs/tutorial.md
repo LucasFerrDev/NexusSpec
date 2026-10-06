@@ -47,7 +47,8 @@ perguntada se o projeto ainda não tiver código nem `architecture.md`.
 Em seguida, ela propõe o design (abordagem, arquivos, testes, riscos) para
 você aprovar e grava:
 
-- `docs/architecture/architecture.md` — stack e padrões do projeto
+- `docs/architecture/architecture.md` — stack, padrões e estrutura de pastas
+  (`backend/` para servidor/API e `frontend/` para interface)
 - `features/specs/autenticacao-usuario/spec.md` — comportamento esperado (Given/When/Then)
 - `features/specs/autenticacao-usuario/design.md` — design técnico
 

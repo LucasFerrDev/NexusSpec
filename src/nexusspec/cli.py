@@ -222,6 +222,8 @@ Para atualizar a própria CLI: `uv tool upgrade nexusspec` ou
 
 ```
 {project_name}/
+├── backend/                   ← servidor/API (criado pela skill apply, se houver)
+├── frontend/                  ← interface (criado pela skill apply, se houver)
 ├── docs/
 │   ├── prd/                   ← PRD, personas, métricas
 │   └── architecture/          ← decisões técnicas, épicos
