@@ -15,21 +15,50 @@ dos documentos e do código existentes.
 Leia antes de começar:
 - `docs/prd/prd.md`
 - `docs/architecture/architecture.md`
+- `docs/architecture/epics.md` — backlog de features
 - O código do repositório (estrutura de pastas, arquivos de dependências como
   `package.json`, `pyproject.toml`, `go.mod`, `pom.xml`, e os padrões existentes)
 
-Identifique a feature:
-- Liste as pastas em `features/specs/`.
-- Se houver só uma pasta cujo `spec.md` ainda não foi preenchido, use-a.
-- Se houver mais de uma candidata, pergunte qual especificar.
-- Se não houver nenhuma, peça para o usuário executar `nspec task new --name <nome-da-feature>`.
+## Passo 2 — Escolha e criação da feature
+
+Se o usuário já indicou a feature ao chamar a skill (ex: "specify login"), use-a e pule a escolha.
+
+Caso contrário, monte a lista de features **sem spec**:
+- features do `epics.md` que não têm pasta em `features/specs/` nem em `features/done/`
+- pastas em `features/specs/` cujo `spec.md` ainda não foi preenchido
+  (ex: criadas pelo `nspec task new`)
+
+Apresente a lista, na ordem de prioridade do `epics.md`, e pergunte:
+
+```
+Features do backlog ainda sem spec:
+  1. login — usuário entra com e-mail e senha (Alta)
+  2. cadastro-usuario — novo usuário cria conta (Alta)
+  3. relatorios — exportar relatórios em PDF (Média)
+
+Qual vamos especificar? (digite o número ou descreva uma feature nova)
+```
+
+Se o `epics.md` estiver vazio e não houver pastas candidatas, pergunte diretamente qual
+feature especificar.
+
+Ao definir a feature:
+1. Determine o nome da pasta: minúsculas, sem acentos, palavras separadas por hífen,
+   apenas `a-z`, `0-9` e `-` (mesma regra do `nspec task new`).
+2. **Crie a pasta imediatamente**, gravando `features/specs/[nome-da-feature]/spec.md` com
+   o conteúdo provisório `# Spec — [nome-da-feature]` (será substituído no Passo 6).
+   Se a pasta já existir, apenas use-a.
+3. Se a feature for nova (não estava no `epics.md`), adicione-a ao `epics.md` na área
+   adequada, sem alterar as demais linhas.
+
+## Passo 3 — Stack
 
 Identifique a stack:
 - Se `docs/architecture/architecture.md` já descreve a stack, use-a.
 - Senão, infira a stack a partir do código.
 - Somente se não houver stack documentada **nem** código no repositório, faça a pergunta condicional abaixo.
 
-## Passo 2 — Perguntas
+## Passo 4 — Perguntas
 
 Faça as perguntas abaixo **uma de cada vez**, aguardando a resposta antes de continuar.
 Ofereça 2-3 sugestões baseadas no PRD como ponto de partida, deixando claro que o
@@ -46,7 +75,7 @@ saberá que ela está pronta (critérios de aceite).
 **Pergunta condicional — apenas se não houver stack documentada nem código:**
 Qual stack você quer usar? (linguagem, framework de backend/frontend, banco de dados, ferramenta de testes)
 
-## Passo 3 — Checkpoint do design
+## Passo 5 — Checkpoint do design
 
 Antes de gravar qualquer arquivo, apresente uma proposta curta com:
 
@@ -59,7 +88,7 @@ Antes de gravar qualquer arquivo, apresente uma proposta curta com:
 
 Pergunte se o usuário aprova. Ajuste o que ele corrigir e só então gere os arquivos.
 
-## Passo 4 — Arquivos
+## Passo 6 — Arquivos
 
 Com base nas respostas e no design aprovado, gere e salve:
 
@@ -147,6 +176,7 @@ Arquivos gerados:
 - `features/specs/[nome-da-feature]/spec.md`
 - `features/specs/[nome-da-feature]/design.md`
 - `docs/architecture/architecture.md` (quando criado ou atualizado)
+- `docs/architecture/epics.md` (quando a feature é nova no backlog)
 
 Escreva em português.
 

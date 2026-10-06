@@ -26,18 +26,21 @@ mostra um resumo para você aprovar e grava:
 - `docs/prd/personas.md` — perfis de usuário
 - `docs/prd/metrics.md` — métricas de sucesso
 
+- `docs/architecture/epics.md` — backlog de features, uma por funcionalidade essencial
+
 O PRD é feito uma vez por produto e serve de contexto para todas as features.
 
 ## 2. Specify — especificar uma feature
 
-Crie a pasta da feature pela CLI:
+Execute a skill **specify** no agente. Ela lista as features do backlog
+(`epics.md`) que ainda não têm spec e pergunta qual especificar — você também pode
+descrever uma feature nova, que é adicionada ao backlog. A skill cria a pasta
+`features/specs/<feature>/` na hora; não é preciso rodar nenhum comando no terminal.
 
-```bash
-nspec task new --name autenticacao-usuario
-```
+> Se preferir criar a pasta pela CLI, `nspec task new --name autenticacao-usuario`
+> continua disponível; o specify reconhece a pasta criada.
 
-Depois execute a skill **specify** no agente. Ela lê o PRD, a arquitetura e o
-código, e faz 3 perguntas: o que a feature deve fazer (critérios de aceite),
+Com a feature definida, a skill lê o PRD, a arquitetura e o código, e faz 3 perguntas: o que a feature deve fazer (critérios de aceite),
 quais regras e casos de borda tratar e se há restrições técnicas. A stack só é
 perguntada se o projeto ainda não tiver código nem `architecture.md`.
 

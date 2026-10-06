@@ -147,7 +147,7 @@ nspec task archive autenticacao-usuario        # move a feature para features/do
 nspec task archive autenticacao-usuario --yes  # arquiva sem confirmação
 ```
 
-- `task new` cria `spec.md`, `design.md`, `task.md` e `verify.md` na pasta da feature.
+- `task new` é **opcional**: a skill specify já cria a pasta da feature escolhida no backlog (`docs/architecture/epics.md`). Pela CLI, ele cria `spec.md`, `design.md`, `task.md` e `verify.md`. O nome vira o nome da pasta em minúsculas, sem acentos e com hífens (`Autenticação Usuário` → `autenticacao-usuario`).
 - `task done <feature> <índice-ou-texto>` marca o item do `task.md` como `[x]` e o move para a seção `## Concluído`. O índice conta apenas as tasks pendentes, a partir de 1; o texto é comparado sem diferenciar maiúsculas e precisa identificar uma única task.
 - `task archive` pede confirmação quando o `task.md` ainda tem tasks pendentes; use `--yes` para pular.
 
@@ -259,8 +259,8 @@ Esse desenho aplica o princípio aberto/fechado: o fluxo de geração é o mesmo
 
 Depois de rodar `nspec init`, use as skills instaladas na sua ferramenta de IA na ordem:
 
-1. **prd** — gera `docs/prd/`
-2. **specify** — gera `features/specs/[feature]/spec.md` e `design.md`
+1. **prd** — gera `docs/prd/` e o backlog de features em `docs/architecture/epics.md`
+2. **specify** — escolhe uma feature do backlog, cria `features/specs/[feature]/` e gera `spec.md` e `design.md`
 3. **task** — gera `features/specs/[feature]/task.md`
 4. **apply** — implementa as tasks pendentes
 5. **verify** — valida a implementação e recomenda arquivamento

@@ -4,6 +4,7 @@ import click
 import re
 import shutil
 import subprocess
+import unicodedata
 import questionary
 from collections.abc import Callable
 from questionary import Style
@@ -163,8 +164,18 @@ def _create_docs_structure(target_dir: Path):
     )
     _scaffold_file(
         target_dir / ARCH_DIR / "epics.md",
-        "# Épicos\n\n> Features agrupadas por área de produto.\n",
+        "# Épicos\n\n"
+        "> Backlog de features do produto, agrupadas por área. Gerado pela skill prd.\n"
+        "> O status vem das pastas: features/specs/<feature>/ (em andamento) e\n"
+        "> features/done/<feature>/ (concluída).\n",
     )
+
+
+def _slugify(name: str) -> str:
+    """Converte o nome da feature em nome de pasta: minúsculas, sem acentos, com hífens."""
+    normalized = unicodedata.normalize("NFKD", name)
+    ascii_name = normalized.encode("ascii", "ignore").decode("ascii").lower()
+    return re.sub(r"[^a-z0-9]+", "-", ascii_name).strip("-")
 
 
 def _scaffold_file(path: Path, content: str):
@@ -195,7 +206,7 @@ Use-as diretamente pelo seu agente na seguinte ordem:
 ## Comandos úteis
 
 ```bash
-nspec task new --name nome-da-feature        # cria nova feature em features/specs/
+nspec task new --name nome-da-feature        # (opcional) cria a feature; a skill specify também cria
 nspec task status                            # exibe progresso de todas as features
 nspec task archive nome-da-feature           # arquiva feature concluída em features/done/
 nspec open                                   # abre o projeto no editor escolhido
@@ -648,7 +659,9 @@ def task():
 )
 def task_new(name: str | None, target: Path | None):
     """
-    Cria a estrutura de uma nova tarefa interativamente.
+    Cria a estrutura de uma nova feature (opcional: a skill specify também cria).
+
+    O nome vira o nome da pasta: minúsculas, sem acentos e com hífens.
 
     \b
     Exemplos:
@@ -673,8 +686,10 @@ def task_new(name: str | None, target: Path | None):
             click.echo(click.style("\n  Operação cancelada.\n", fg="bright_black"))
             return
 
-    # Normaliza: lowercase, espaços → hífens
-    name_slug = name.strip().lower().replace(" ", "-")
+    name_slug = _slugify(name)
+    if not name_slug:
+        click.echo(click.style("  ✗  Nome de feature inválido.", fg="red"))
+        raise SystemExit(1)
     feature_dir = target_dir / SPECS_DIR / name_slug
     feature_dir.mkdir(parents=True, exist_ok=True)
 
@@ -755,7 +770,8 @@ def task_status(target: Path | None):
 
     if not features:
         click.echo(click.style("\n  Nenhuma feature encontrada.\n", fg="yellow"))
-        click.echo(click.style("  Use  nspec task new --name nome-da-feature  para criar uma.\n", fg="bright_black"))
+        click.echo(click.style("  Execute a skill specify no seu agente de IA para criar uma,", fg="bright_black"))
+        click.echo(click.style("  ou use  nspec task new --name nome-da-feature.\n", fg="bright_black"))
         return
 
     click.echo(click.style(BANNER, fg="cyan"))

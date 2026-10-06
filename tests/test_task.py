@@ -37,6 +37,28 @@ def test_task_new_cria_arquivos(runner, project):
     assert "specify" in result.output
 
 
+@pytest.mark.parametrize("name, slug", [
+    ("Autenticação de Usuário", "autenticacao-de-usuario"),
+    ("  Relatórios PDF/CSV  ", "relatorios-pdf-csv"),
+    ("cadastro_usuario", "cadastro-usuario"),
+    ("login", "login"),
+])
+def test_slugify(name, slug):
+    assert cli._slugify(name) == slug
+
+
+def test_task_new_remove_acentos(runner, project):
+    result = runner.invoke(cli.main, ["task", "new", "--name", "Autenticação Usuário"])
+
+    assert result.exit_code == 0, result.output
+    assert (project / cli.SPECS_DIR / "autenticacao-usuario" / "spec.md").exists()
+
+
+def test_task_new_nome_invalido(runner, project):
+    result = runner.invoke(cli.main, ["task", "new", "--name", "!!!"])
+    assert result.exit_code == 1
+
+
 def test_task_new_fora_de_projeto(runner, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 

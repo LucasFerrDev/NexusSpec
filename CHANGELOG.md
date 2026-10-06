@@ -23,6 +23,10 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - specify passa a perguntar comportamento e critérios de aceite (antes inexistente) e não
   repete a stack a cada feature; prd passa a cobrir restrições e fora do escopo.
 - verify grava o relatório em `features/specs/<feature>/verify.md`.
+- prd grava o backlog de features em `docs/architecture/epics.md`; specify lista as
+  features do backlog sem spec e cria a pasta da escolhida, sem precisar do terminal.
+- `nspec task new` passa a ser opcional e gera o nome da pasta sem acentos
+  (`Autenticação Usuário` → `autenticacao-usuario`).
 - Nome da skill padronizado como `specify` (frontmatter do template, `nspec list`, README gerado, `task new` e metadados do Cursor).
 - `nspec update` só regenera as skills, sempre sobrescrevendo, e não abre mais o editor. A opção `--force` foi removida.
 - Cursor, Antigravity e Codex usam a `description` do template; os valores fixos anteriores viraram fallback.

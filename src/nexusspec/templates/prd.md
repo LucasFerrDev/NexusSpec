@@ -39,6 +39,8 @@ Antes de gravar qualquer arquivo, apresente um resumo com:
 - Objetivo e métricas de sucesso
 - Funcionalidades priorizadas
 - Fora do escopo e restrições
+- Backlog de features proposto: cada funcionalidade essencial vira uma ou mais features,
+  com o nome da pasta já no formato final (ex: `login`, `cadastro-usuario`)
 
 Pergunte se está correto. Ajuste o que eu corrigir e só então gere os arquivos.
 
@@ -64,8 +66,31 @@ Com base nas respostas, gere e salve os seguintes arquivos:
 - Métricas de qualidade
 - Critérios de sucesso por funcionalidade
 
+**`docs/architecture/epics.md`** com o backlog de features, agrupadas por área de produto.
+Se o arquivo já tiver features, preserve-as e adicione apenas as novas. Use este formato:
+
+```markdown
+# Épicos
+
+> Backlog de features do produto, agrupadas por área. Gerado pela skill prd.
+> O status vem das pastas: features/specs/<feature>/ (em andamento) e
+> features/done/<feature>/ (concluída).
+
+## [Área de produto]
+
+| Feature | Descrição | Prioridade |
+|---|---|---|
+| `nome-da-feature` | [o que a feature entrega, em uma frase] | Alta / Média / Baixa |
+```
+
+Regras para o nome da feature (mesmas do `nspec task new`): letras minúsculas, sem acentos,
+palavras separadas por hífen, apenas `a-z`, `0-9` e `-`.
+
+**Não crie pastas em `features/`** — a skill specify cria a pasta de cada feature quando
+ela for especificada.
+
 Escreva em português. Sem código, sem decisões técnicas.
 Não invente informações que eu não forneci: se algo essencial faltar, pergunte.
 
-Ao finalizar e salvar os arquivos, oriente explicitamente o usuário a criar a primeira
-feature com `nspec task new --name <nome-da-feature>` e executar a próxima skill: `specify`.
+Ao finalizar e salvar os arquivos, oriente explicitamente o usuário a executar a próxima
+skill: `specify`, que vai listar as features do backlog para escolher qual especificar.
