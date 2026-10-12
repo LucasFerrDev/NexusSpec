@@ -27,6 +27,19 @@ vez, e grava:
 
 O PRD é feito uma vez por produto e serve de contexto para todas as features.
 
+### Complementar um PRD existente
+
+Para incluir uma funcionalidade que não estava prevista, execute a skill **prd**
+de novo. Se `docs/prd/prd.md` já estiver preenchido, a skill mostra um resumo do
+PRD atual e pergunta se você quer **complementar**, **recriar do zero** ou
+**cancelar**.
+
+No modo complementar, a skill faz só as perguntas da mudança (funcionalidade,
+persona, prioridade, métrica e escopo), aponta conflitos com o PRD atual, mostra
+as alterações e pede confirmação antes de salvar. Os três arquivos são editados
+nos trechos afetados, e a mudança fica registrada em `## Histórico de alterações`
+no `prd.md`. Em seguida, crie a feature com `nspec task new` e siga para o passo 2.
+
 ## 2. Specify — especificar uma feature
 
 Crie a pasta da feature pela CLI:
@@ -57,6 +70,18 @@ Execute a skill **task**. Ela lê o PRD, a arquitetura, o `spec.md` e o
 
 ## Concluído
 ```
+
+### Complementar um task.md existente
+
+Se o `task.md` da feature já tiver tasks, executar **task** de novo não apaga o
+progresso. A skill mostra o resumo do checklist e oferece quatro opções:
+**complementar** (só adiciona tasks em `## Pendente`), **regerar apenas as
+pendentes**, **recriar do zero** (pede confirmação, porque perde o histórico) ou
+**cancelar**.
+
+No modo complementar, a skill compara `spec.md` e `design.md` com as tasks
+existentes, sugere as lacunas, evita duplicatas e nunca altera `## Concluído`.
+Ajustes em algo já implementado viram uma task nova, sem reabrir o item `[x]`.
 
 Acompanhe o progresso de todas as features com:
 
