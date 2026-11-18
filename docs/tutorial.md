@@ -39,9 +39,10 @@ PRD atual e pergunta se você quer **complementar**, **recriar do zero** ou
 
 No modo complementar, a skill faz só as perguntas da mudança (funcionalidade,
 persona, prioridade, métrica e escopo), aponta conflitos com o PRD atual, mostra
-as alterações e pede confirmação antes de salvar. Os três arquivos são editados
-nos trechos afetados, e a mudança fica registrada em `## Histórico de alterações`
-no `prd.md`. Em seguida, crie a feature com `nspec task new` e siga para o passo 2.
+as alterações e pede confirmação antes de salvar. Os arquivos do PRD são editados
+nos trechos afetados, a mudança fica registrada em `## Histórico de alterações`
+no `prd.md` e as features novas entram no `epics.md`. Em seguida, siga para o
+passo 2: o **specify** já lista as features novas do backlog.
 
 ## 2. Specify — especificar uma feature
 
@@ -128,6 +129,34 @@ nspec task archive autenticacao-usuario
 ```
 
 Se ainda houver tasks pendentes, a CLI pede confirmação (use `--yes` para pular).
+
+## 6. Depois da primeira versão: evoluindo o produto
+
+O PRD é feito uma vez, mas o ciclo **specify → task → apply → verify** se repete
+para cada feature nova. Para adicionar funcionalidades a um software já entregue,
+escolha o caminho conforme o tamanho da mudança:
+
+| Situação | Caminho |
+|---|---|
+| Feature nova que cabe no produto atual (não muda objetivo, personas, métricas nem escopo) | **specify** → descreva a feature nova → **task** → **apply** → **verify** |
+| Feature que muda o produto (novo público, algo que estava fora do escopo, nova métrica) | **prd** (complementar) → **specify** → **task** → **apply** → **verify** |
+| Ajuste em uma feature ainda em `features/specs/` | **specify** da feature (atualiza a spec) → **task** (complementar) → **apply** → **verify** |
+| Evolução de uma feature já arquivada em `features/done/` | **specify** → cria uma **feature derivada** (ex: `login` → `login-2fa`) → **task** → **apply** → **verify** |
+
+Regras que mantêm o histórico consistente:
+
+- **Features arquivadas não são reabertas.** O que já foi entregue e verificado fica
+  em `features/done/` como registro. Uma mudança vira uma feature derivada, com nome
+  próprio, que referencia a original no `epics.md` e no `spec.md`.
+- **Tasks concluídas não são reabertas.** Um ajuste em algo já implementado vira uma
+  task nova em `## Pendente`.
+- **A documentação vem antes do código.** Se a mudança não está no `spec.md`/`design.md`,
+  rode o **specify** antes do **task**; se ela muda o produto, rode o **prd** antes do **specify**.
+- O `architecture.md` é atualizado pelo **specify** sempre que uma feature introduz
+  algo novo (banco, integração, padrão).
+
+Use `nspec task status` para ver o que está em andamento e consulte o `epics.md` para
+ver o backlog completo do produto.
 
 ## Manter as skills atualizadas
 

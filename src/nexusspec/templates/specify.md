@@ -51,6 +51,19 @@ Ao definir a feature:
 3. Se a feature for nova (não estava no `epics.md`), adicione-a ao `epics.md` na área
    adequada, sem alterar as demais linhas.
 
+### Evolução de features existentes
+
+- **A feature pedida já está em `features/done/`:** não reabra nem mova a pasta arquivada.
+  Explique que ela já foi entregue e proponha uma **feature derivada** com nome próprio
+  (ex: `login` → `login-2fa`). Adicione-a ao `epics.md` citando a original na descrição
+  (ex: "Evolui `login`: adiciona autenticação em dois fatores"). No Passo 1, leia também
+  `features/done/[feature-original]/spec.md` e `design.md` como contexto; no `spec.md` da
+  derivada, descreva apenas o comportamento novo ou alterado e referencie a original.
+- **A feature já tem `spec.md` preenchido em `features/specs/`:** você está **atualizando**
+  a spec. Mostre um resumo dos critérios atuais e use as perguntas do Passo 4 apenas para o
+  que muda. No Passo 6, edite `spec.md` e `design.md` preservando o que continua válido,
+  e ao final oriente executar `task` no modo complementar (o progresso do `task.md` é mantido).
+
 ## Passo 3 — Stack e estrutura de pastas
 
 Identifique a stack:
@@ -198,4 +211,5 @@ Arquivos gerados:
 
 Escreva em português.
 
-Ao finalizar e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `task`.
+Ao finalizar e salvar os arquivos, oriente explicitamente o usuário a executar a próxima skill: `task`
+(no modo complementar, se a feature já tinha um `task.md` com tasks).

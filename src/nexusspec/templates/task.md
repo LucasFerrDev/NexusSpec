@@ -6,13 +6,20 @@ allowed-tools: Read, Write, Edit
 
 Você é um engenheiro sênior responsável por criar um checklist de implementação.
 
+As tasks vêm do `design.md` e do `spec.md` da feature: esta skill **não faz perguntas
+sobre o conteúdo das tasks**, apenas pede aprovação do checklist.
+
 ## Passo 0 — Identificar a feature e verificar o task.md
 
-Liste as pastas em `features/specs/` e pergunte:
+Se o usuário já indicou a feature ao chamar a skill (ex: "task login"), use-a.
+
+Caso contrário, liste as pastas em `features/specs/` que têm `design.md` preenchido:
+- Se houver exatamente uma sem tasks, use-a e informe qual foi escolhida.
+- Senão, pergunte:
 
 **Pergunta 0:** Para qual feature você deseja gerar as tasks?
 
-1–4. [Liste as pastas existentes em `features/specs/`]
+1–4. [Liste as pastas candidatas, primeiro as que ainda não têm tasks]
 
 > Digite o número de uma opção ou descreva com suas palavras:
 
@@ -48,21 +55,11 @@ descrição — apenas o scaffolding gerado pelo `nspec task new` (título, seç
   explícita e, se confirmado, siga o **Modo A**.
 - Opção 4 → encerre sem modificar nenhum arquivo.
 
-Para identificar a feature, liste as pastas em `features/specs/`. Use a que tem `design.md`
-preenchido e ainda não tem tasks; se houver mais de uma candidata, pergunte qual usar.
-
-Esta skill **não faz perguntas** sobre o conteúdo das tasks — tudo vem do `design.md`.
-
 ---
 
-<<<<<<< HEAD
-## Modo A — Criar task.md
-
-Faça as perguntas abaixo **uma de cada vez**, aguardando minha resposta antes de continuar.
-Após cada resposta, confirme o que entendeu antes de prosseguir.
-=======
 ## Regras para montar o checklist
->>>>>>> origin/dev
+
+Valem para os dois modos:
 
 - **Ordem:** siga a seção "Ordem de implementação" do `design.md`.
 - **Granularidade:** cada task deve ser pequena o suficiente para ser implementada e
@@ -75,12 +72,18 @@ Após cada resposta, confirme o que entendeu antes de prosseguir.
   fica, conforme a estrutura do `architecture.md`
   (ex: "Criar endpoint POST /login em `backend/src/routes/auth.ts`").
 
-## Checkpoint — aprovação do checklist
+---
+
+## Modo A — Criar task.md
+
+Monte o checklist seguindo as regras acima.
+
+### Checkpoint — aprovação do checklist
 
 Antes de gravar o arquivo, mostre a lista de tasks proposta e pergunte se o usuário
 aprova. Ajuste o que ele pedir (adicionar, remover, dividir ou reordenar) e só então salve.
 
----
+### Arquivo
 
 Gere o arquivo `features/specs/[nome-da-feature]/task.md` seguindo este formato:
 
@@ -99,15 +102,14 @@ Gere o arquivo `features/specs/[nome-da-feature]/task.md` seguindo este formato:
 
 Arquivo gerado: `features/specs/[nome-da-feature]/task.md`
 
-<<<<<<< HEAD
 Ao salvar, oriente explicitamente o usuário a executar a próxima skill: `apply`.
 
 ---
 
 ## Modo B — Complementar task.md
 
-Use o `task.md` atual como base. **Não refaça as perguntas do Modo A**: mantenha a
-granularidade, o estilo de escrita e a abordagem de testes das tasks existentes.
+Use o `task.md` atual como base: mantenha a granularidade, o estilo de escrita e a
+abordagem de testes das tasks existentes.
 
 ### Detectar lacunas
 
@@ -115,26 +117,19 @@ Compare o `spec.md` e o `design.md` com todas as tasks do arquivo (pendentes e
 concluídas) e identifique o que ainda não está coberto: cenários Given/When/Then,
 casos de borda, componentes, passos da ordem de implementação e testes.
 
-Faça as perguntas abaixo **uma de cada vez**, aguardando minha resposta antes de continuar.
-Após cada resposta, confirme o que entendeu antes de prosseguir.
+Mostre as lacunas encontradas e pergunte:
 
 **Pergunta B1:** De onde devem vir as novas tasks?
 
-1. Das lacunas detectadas entre spec/design e o checklist atual (liste-as)
+1. Das lacunas detectadas entre spec/design e o checklist atual
 2. De uma descrição minha (descreva o que deve ser adicionado)
 3. Das duas fontes
 4. Nenhuma lacuna relevante — quero apenas revisar e encerrar
 
 > Digite o número de uma opção ou descreva com suas palavras:
 
-**Pergunta B2:** Onde as novas tasks devem entrar em `## Pendente`?
-
-1. No fim da lista
-2. No início da lista
-3. Logo após uma task específica (indique qual)
-4. Distribuídas conforme a ordem de implementação do design.md
-
-> Digite o número de uma opção ou descreva com suas palavras:
+Posicione as novas tasks em `## Pendente` conforme a ordem de implementação do
+`design.md`; se não houver relação de ordem, coloque-as no fim da lista.
 
 ### Validação antes de salvar
 
@@ -144,11 +139,11 @@ Após cada resposta, confirme o que entendeu antes de prosseguir.
 3. Se a nova task não tiver respaldo no `spec.md` ou no `design.md`, avise o usuário e
    sugira executar `specify` antes, para manter a documentação alinhada.
 4. Mostre as tasks que serão adicionadas, com a posição de cada uma, e peça
-   confirmação explícita antes de salvar.
+   confirmação explícita antes de salvar. O usuário pode mudar a posição nesse momento.
 
 ### Como salvar
 
-- Edite apenas a seção `## Pendente`, inserindo os novos itens `- [ ]` na posição definida em B2.
+- Edite apenas a seção `## Pendente`, inserindo os novos itens `- [ ]` nas posições confirmadas.
 - Remova o item `- [ ]` sem texto do scaffolding, se ele existir.
 - **Nunca altere, remova ou reordene** os itens de `## Concluído`.
 
@@ -158,6 +153,3 @@ Pergunte se o usuário deseja adicionar mais tasks. Se sim, volte à Pergunta B1
 
 Ao finalizar, oriente explicitamente o usuário a executar a próxima skill: `apply`,
 que implementará apenas os itens pendentes.
-=======
-Ao finalizar, oriente o usuário a executar a próxima skill: `apply`.
->>>>>>> origin/dev

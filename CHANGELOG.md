@@ -3,6 +3,21 @@
 Todas as mudanças relevantes deste projeto são documentadas aqui.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
+## [Não lançado]
+
+### Adicionado
+- Ciclo de evolução do produto depois da primeira versão: tutorial ganha a seção
+  "Depois da primeira versão" com o caminho para cada tipo de mudança.
+- specify trata features já arquivadas em `features/done/` criando uma feature derivada
+  (ex: `login` → `login-2fa`) e atualiza specs existentes sem apagar o que continua válido.
+
+### Corrigido
+- Marcadores de conflito de merge nos templates `prd.md` e `task.md`.
+- prd no modo complementar adiciona as features novas ao `epics.md` e orienta executar
+  `specify`, em vez de `nspec task new`.
+- task: instruções contraditórias na escolha da feature e o modo complementar sem a pergunta
+  de posição (as tasks seguem a ordem do `design.md` e a posição é confirmada no checkpoint).
+
 ## [0.2.0] - 2026-10-05
 
 ### Adicionado
