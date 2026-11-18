@@ -18,12 +18,15 @@ Para usar outra ferramenta depois, rode `nspec skills add --tool <ferramenta>`.
 
 ## 1. PRD — definir o produto
 
-No agente, execute a skill **prd**. Ela faz perguntas guiadas, uma de cada
-vez, e grava:
+No agente, execute a skill **prd**. Ela faz 4 perguntas (problema e público,
+resultado esperado, funcionalidades essenciais, fora do escopo e restrições),
+mostra um resumo para você aprovar e grava:
 
 - `docs/prd/prd.md` — visão, objetivo, funcionalidades e escopo
 - `docs/prd/personas.md` — perfis de usuário
 - `docs/prd/metrics.md` — métricas de sucesso
+
+- `docs/architecture/epics.md` — backlog de features, uma por funcionalidade essencial
 
 O PRD é feito uma vez por produto e serve de contexto para todas as features.
 
@@ -42,23 +45,31 @@ no `prd.md`. Em seguida, crie a feature com `nspec task new` e siga para o passo
 
 ## 2. Specify — especificar uma feature
 
-Crie a pasta da feature pela CLI:
+Execute a skill **specify** no agente. Ela lista as features do backlog
+(`epics.md`) que ainda não têm spec e pergunta qual especificar — você também pode
+descrever uma feature nova, que é adicionada ao backlog. A skill cria a pasta
+`features/specs/<feature>/` na hora; não é preciso rodar nenhum comando no terminal.
 
-```bash
-nspec task new --name autenticacao-usuario
-```
+> Se preferir criar a pasta pela CLI, `nspec task new --name autenticacao-usuario`
+> continua disponível; o specify reconhece a pasta criada.
 
-Depois execute a skill **specify** no agente. Ela pergunta sobre stack,
-componentes e arquivos afetados, e grava:
+Com a feature definida, a skill lê o PRD, a arquitetura e o código, e faz 3 perguntas: o que a feature deve fazer (critérios de aceite),
+quais regras e casos de borda tratar e se há restrições técnicas. A stack só é
+perguntada se o projeto ainda não tiver código nem `architecture.md`.
 
-- `docs/architecture/architecture.md` — stack e padrões do projeto
+Em seguida, ela propõe o design (abordagem, arquivos, testes, riscos) para
+você aprovar e grava:
+
+- `docs/architecture/architecture.md` — stack, padrões e estrutura de pastas
+  (`backend/` para servidor/API e `frontend/` para interface)
 - `features/specs/autenticacao-usuario/spec.md` — comportamento esperado (Given/When/Then)
 - `features/specs/autenticacao-usuario/design.md` — design técnico
 
 ## 3. Task — gerar o checklist
 
-Execute a skill **task**. Ela lê o PRD, a arquitetura, o `spec.md` e o
-`design.md` e gera `features/specs/autenticacao-usuario/task.md`:
+Execute a skill **task**. Ela não faz perguntas: monta o checklist a partir da
+ordem de implementação e da estratégia de testes do `design.md`, mostra a lista
+para você aprovar e gera `features/specs/autenticacao-usuario/task.md`:
 
 ```markdown
 # Tasks — autenticacao-usuario
@@ -91,8 +102,9 @@ nspec task status
 
 ## 4. Apply — implementar
 
-Execute a skill **apply**. Ela percorre `features/specs/`, implementa as tasks
-pendentes e as move para `## Concluído` no `task.md`.
+Execute a skill **apply**. Ela mostra um plano (features pendentes, ordem,
+estratégia de commits) e pede uma única confirmação. Depois implementa as tasks,
+roda os testes e move cada item para `## Concluído` no `task.md`.
 
 Se você implementar algo manualmente, marque a task pela CLI:
 
@@ -103,15 +115,19 @@ nspec task done autenticacao-usuario "login"    # por um trecho do texto
 
 ## 5. Verify — validar e arquivar
 
-Execute a skill **verify**. Ela confere a implementação contra o `spec.md`, o
-`design.md` e o `task.md` de cada feature e recomenda o arquivamento das que estão prontas.
+Execute a skill **verify** (opcionalmente indicando a feature). Ela confere a
+implementação contra cada critério do `spec.md`, roda os testes, salva o relatório
+em `verify.md` e **move as features aprovadas para `features/done/`**, junto com o
+relatório. Features parciais ou reprovadas continuam em `features/specs/` com o
+`verify.md` explicando o que falta.
+
+Para arquivar manualmente (por exemplo, uma feature que você decidiu encerrar):
 
 ```bash
 nspec task archive autenticacao-usuario
 ```
 
-A feature vai para `features/done/`. Se ainda houver tasks pendentes, a CLI
-pede confirmação (use `--yes` para pular).
+Se ainda houver tasks pendentes, a CLI pede confirmação (use `--yes` para pular).
 
 ## Manter as skills atualizadas
 

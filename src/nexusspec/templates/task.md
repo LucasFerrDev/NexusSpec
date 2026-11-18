@@ -48,39 +48,37 @@ descrição — apenas o scaffolding gerado pelo `nspec task new` (título, seç
   explícita e, se confirmado, siga o **Modo A**.
 - Opção 4 → encerre sem modificar nenhum arquivo.
 
+Para identificar a feature, liste as pastas em `features/specs/`. Use a que tem `design.md`
+preenchido e ainda não tem tasks; se houver mais de uma candidata, pergunte qual usar.
+
+Esta skill **não faz perguntas** sobre o conteúdo das tasks — tudo vem do `design.md`.
+
 ---
 
+<<<<<<< HEAD
 ## Modo A — Criar task.md
 
 Faça as perguntas abaixo **uma de cada vez**, aguardando minha resposta antes de continuar.
 Após cada resposta, confirme o que entendeu antes de prosseguir.
+=======
+## Regras para montar o checklist
+>>>>>>> origin/dev
 
-**Pergunta 1:** Qual é a granularidade desejada para as tasks?
+- **Ordem:** siga a seção "Ordem de implementação" do `design.md`.
+- **Granularidade:** cada task deve ser pequena o suficiente para ser implementada e
+  verificada de forma isolada (um bloco funcional que compila e pode ser testado).
+  Evite tasks vagas ("implementar backend") e tasks triviais ("criar arquivo vazio").
+- **Testes:** siga a estratégia da seção "Testes" do `design.md`. Inclua as tasks de
+  teste junto da task que implementa o comportamento testado.
+- **Rastreabilidade:** todo critério de aceite do `spec.md` deve ser coberto por ao menos uma task.
+- Escreva cada task como uma ação objetiva, começando com verbo e indicando onde o código
+  fica, conforme a estrutura do `architecture.md`
+  (ex: "Criar endpoint POST /login em `backend/src/routes/auth.ts`").
 
-1. Muito atômica — uma task por função ou endpoint
-2. Média — uma task por camada (controller, service, repository)
-3. Por entrega — uma task por bloco funcional completo
-4. Por critério de aceite — uma task por item do spec.md
+## Checkpoint — aprovação do checklist
 
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 2:** Por onde você quer começar a implementação?
-
-1. Pela camada de dados (models, migrations, repositórios)
-2. Pela lógica de negócio (services, use cases)
-3. Pela interface (endpoints, controllers, rotas)
-4. Pelo que tem mais dependências (seguir ordem do spec.md)
-
-> Digite o número de uma opção ou descreva com suas palavras:
-
-**Pergunta 3:** Como tratar os testes no checklist?
-
-1. Incluir tasks de testes unitários para cada componente
-2. Incluir apenas testes de integração por feature
-3. Incluir testes unitários e de integração
-4. Não incluir tasks de teste no checklist
-
-> Digite o número de uma opção ou descreva com suas palavras:
+Antes de gravar o arquivo, mostre a lista de tasks proposta e pergunte se o usuário
+aprova. Ajuste o que ele pedir (adicionar, remover, dividir ou reordenar) e só então salve.
 
 ---
 
@@ -101,6 +99,7 @@ Gere o arquivo `features/specs/[nome-da-feature]/task.md` seguindo este formato:
 
 Arquivo gerado: `features/specs/[nome-da-feature]/task.md`
 
+<<<<<<< HEAD
 Ao salvar, oriente explicitamente o usuário a executar a próxima skill: `apply`.
 
 ---
@@ -159,3 +158,6 @@ Pergunte se o usuário deseja adicionar mais tasks. Se sim, volte à Pergunta B1
 
 Ao finalizar, oriente explicitamente o usuário a executar a próxima skill: `apply`,
 que implementará apenas os itens pendentes.
+=======
+Ao finalizar, oriente o usuário a executar a próxima skill: `apply`.
+>>>>>>> origin/dev

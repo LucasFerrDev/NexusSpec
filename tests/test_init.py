@@ -57,6 +57,14 @@ def test_init_falha_em_pasta_nao_vazia_sem_force(runner, tmp_path, monkeypatch, 
     assert cli._is_nexusspec_project(existing)
 
 
+def test_epics_scaffold_descreve_backlog(runner, tmp_path, monkeypatch, no_editor):
+    monkeypatch.setattr(cli, "_select_tool", lambda: None)
+    runner.invoke(cli.main, ["init", "p", "--target", str(tmp_path)])
+
+    epics = (tmp_path / "p" / "docs" / "architecture" / "epics.md").read_text(encoding="utf-8")
+    assert "Backlog de features" in epics
+
+
 def test_readme_gerado_usa_specify(runner, tmp_path, monkeypatch, no_editor):
     monkeypatch.setattr(cli, "_select_tool", lambda: None)
     runner.invoke(cli.main, ["init", "p", "--target", str(tmp_path)])

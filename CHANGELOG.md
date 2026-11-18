@@ -16,6 +16,22 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - README: comandos `open`, `update` e `task`, override via `prompts/` e a seção "Como funciona a geração de skills".
 
 ### Alterado
+- Perguntas das skills reduzidas de 29 para 7 (+1 condicional): o usuário define o "o quê"
+  (problema, comportamento, limites) e a IA infere o "como" a partir dos docs e do código,
+  apresentando checkpoints de aprovação. prd: 7 → 4; specify: 13 → 3 (+ stack só em projeto
+  vazio); task, apply e verify: 3 → 0.
+- specify passa a perguntar comportamento e critérios de aceite (antes inexistente) e não
+  repete a stack a cada feature; prd passa a cobrir restrições e fora do escopo.
+- verify grava o relatório em `features/specs/<feature>/verify.md`.
+- prd grava o backlog de features em `docs/architecture/epics.md`; specify lista as
+  features do backlog sem spec e cria a pasta da escolhida, sem precisar do terminal.
+- Estrutura de pastas padrão: código de servidor/API em `backend/` e de interface em
+  `frontend/` (specify define no `architecture.md`, task indica o caminho, apply segue e
+  verify confere). Projetos com código existente mantêm a estrutura atual.
+- verify move automaticamente as features aprovadas para `features/done/` (via
+  `nspec task archive --yes`, com fallback para mover a pasta); parciais e reprovadas ficam.
+- `nspec task new` passa a ser opcional e gera o nome da pasta sem acentos
+  (`Autenticação Usuário` → `autenticacao-usuario`).
 - Nome da skill padronizado como `specify` (frontmatter do template, `nspec list`, README gerado, `task new` e metadados do Cursor).
 - `nspec update` só regenera as skills, sempre sobrescrevendo, e não abre mais o editor. A opção `--force` foi removida.
 - Cursor, Antigravity e Codex usam a `description` do template; os valores fixos anteriores viraram fallback.
@@ -23,6 +39,7 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - `_tool_menu` separado em `_select_tool` e `_open_tool`.
 
 ### Corrigido
+- Claude Code não abria no terminal após o `init`/`open`: agora herda o terminal e usa o diretório do projeto como `cwd`, igual ao Codex (PR #8).
 - `apply.md` sem o campo `name` no frontmatter.
 - Codex: `SKILL.md` sempre tem `name` e `description`, inclusive para templates de `prompts/` sem frontmatter.
 - Regra do Cursor para `specify` caía nos metadados genéricos.
